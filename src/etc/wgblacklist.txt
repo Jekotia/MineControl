@@ -1,0 +1,373 @@
+#
+# WorldGuard blacklist
+#
+# The blacklist lets you block actions, blocks, and items from being used.
+# You choose a set of "items to affect" and a list of "actions to perform."
+#
+###############################################################################
+#
+# Example to block some ore mining and placement:
+# [coalore,goldore,ironore]
+# on-break=deny,kick
+# on-place=deny,tell
+#
+# Events that you can detect:
+# - on-break (when a block of this type is about to be broken)
+# - on-destroy-with (the item/block held by the user while destroying)
+# - on-place (a block is being placed)
+# - on-use (an item like flint and steel or a bucket is being used)
+# - on-interact (when a block in used (doors, chests, etc.))
+# - on-drop (an item is being dropped from the player's inventory)
+# - on-acquire (an item enters a player's inventory via some method)
+#
+# Actions (for events):
+# - deny (deny completely, used blacklist mode)
+# - allow (used in whitelist mode)
+# - notify (notify admins with the 'worldguard.notify' permission)
+# - log (log to console/file/database)
+# - tell (tell a player that that's not allowed)
+# - kick (kick player)
+# - ban (ban player)
+#
+# Options:
+# - ignore-groups (comma-separated list of groups to not affect)
+# - ignore-perms (comma-separated list of permissions to not affect - make up
+#   your very own permissions!)
+# - comment (message for yourself that is printed with 'log' and 'notify')
+# - message (optional message to show the user instead; %s is the item name)
+#
+###############################################################################
+#
+# For more information, see:
+# http://wiki.sk89q.com/wiki/WorldGuard/Blacklist
+#
+###############################################################################
+#
+# Some examples follow.
+# REMEMBER: If a line has # in front, it will be ignored.
+#
+
+
+#tracks
+#[66]
+#on-drop=deny,tell,notify
+#on-create=deny,tell,notify
+#on-acquire=deny,tell,notify
+#message=Tracks are not allowed!
+
+#carts
+#[328,342,343]
+#ignore-groups=Operator,Curator,Admin,Mod,Trusted
+#on-break=allow
+#on-place=deny,tell,notify
+#on-acquire=allow
+#on-drop=deny,tell,notify
+#comment=%d/%m/%Y-%h:%i - Player - Did something with a minecart.
+#message=Really what are you doing with that minecart?
+
+###################
+#######Banned######
+###################
+
+#tnt
+[46]
+on-acquire=deny,tell,notify,log
+on-break=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=Player has and/or tried to use TNT!
+message=You are not allowed to use TNT!
+
+#firestarter
+[259]
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-use=deny,tell,notify,log
+comment=Player has and/or tried to use a lighter!
+message=You are not allowed to use lighters!
+
+#Eye of Ender
+[381]
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+on-use=deny,tell,notify,log
+comment=!!!Player has and/or tried to use an Eye of Ender!!!
+message=Eye of Ender's are not allowed!!
+
+#Ender pearl
+[368]
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+on-use=deny,tell,notify,log
+comment=Player has and/or tried to use an Ender Pearl!
+message=Ender Pearls are not allowed!!
+
+#Spawn Eggs
+[383]
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+on-use=deny,tell,notify,log
+comment=Player has and/or tried to use a spawn egg!
+message=Spawn eggs are not allowed!!
+
+###################
+####Unobtainable###
+###################
+
+#fire block
+[51]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,WorldTeam,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a fire tile!!!
+message=You are not allowed to have fire tiles!
+
+#lava
+[10,11]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,WorldTeam,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a lava tile!!!
+message=You are not allowed to have lava tiles!
+
+#water
+[8,9]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a water tile!!!
+message=You are not allowed to have water tiles!
+
+#spawners
+[52]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-break=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a mobspawner!!!
+message=You are not allowed to have mobspawners!
+
+#bedrock
+[7]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use bedrock!!!
+message=You are not allowed to have bedrock!
+
+#bedrock break
+[7]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-break=deny,tell,notify
+comment=Player broke BEDROCK o.o
+
+#Coal Ore
+[16]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use coal ore!!!
+message=You are not allowed to have coal ore!
+
+#Diamond ore
+[56]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use diamond ore!!!
+message=You are not allowed to have diamond ore!
+
+#Lapis ore
+[21]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use lapis ore!!!
+message=You are not allowed to have lapis ore!
+
+#redstone ore
+[73,74]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use redstone ore!!!
+message=You are not allowed to have redstone ore!
+
+#Burning Furnace
+[62]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a pre-lit furnace!!!
+message=You are not allowed to have pre-lit furnaces!
+
+#nether portal
+[90]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-break=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a portal tile!!!
+message=You are not allowed to have portal tiles!
+
+#Ice
+[79]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use an ice block!!!
+message=You are not allowed to have ice blocks!
+
+#Snowtops
+[78]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a snow top!!!
+message=You are not allowed to have snow tops!
+
+#Piston extension
+[34]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a piston extension!!!
+message=You are not allowed to have piston extensions!
+
+#Block moved by piston
+[36]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-break=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a 'block moved by piston'!!!
+message=You are not allowed to have 'block moved by piston'!
+
+#Double slabs
+[43]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a double slab!!!
+message=You are not allowed to have double slabs!
+
+#Farmland
+[60]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+comment=!!!Player has and/or tried to use farmland!!!
+message=You are not allowed to have farmland!
+
+#Redstone torch (off)
+[75]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a redstone torch (off)!!!
+message=You are not allowed to have redstone torch (off)!
+
+#Locked Chest
+[95]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a locked chest!!!
+message=You are not allowed to have locked chests!
+
+#End portal
+[119]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-break=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a end portal entity!!!
+message=You are not allowed to have end portal entities!
+
+#End portal frame
+[120]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a end portal frame block!!!
+message=You are not allowed to have end portal frame blocks!
+
+#Dragon egg
+[122]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor
+on-acquire=deny,tell,notify,log
+on-drop=deny,tell,notify,log
+on-place=deny,tell,notify,log
+comment=!!!Player has and/or tried to use a dragon egg!!!
+message=You are not allowed to have dragon eggs!
+
+###################
+######Allowed######
+###################
+
+#glass
+[20]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor,Elder,Veteran,Trusted
+on-break=allow,notify
+comment=Player is breaking Glass.
+
+#glowstone
+[89]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor,Elder,Veteran,Trusted
+on-break=allow,notify
+comment=Player is breaking Glowstone.
+
+#Obsidian
+[49]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor,Elder
+on-place=allow,notify
+comment=Player is using Obsidian.
+
+#DiamondBlock
+[57]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect
+on-place=allow,notify
+on-break=allow,notify
+comment=Player is using diamond blocks.
+
+#IronBlock
+[42]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect
+on-place=allow,notify
+on-break=allow,notify
+comment=Player is using iron blocks.
+
+#GoldBlock
+[41]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect
+on-place=allow,notify
+on-break=allow,notify
+comment=Player is using gold blocks.
+
+#Ice blocks
+[79]
+ignore-groups=Operator,Curator,Admin,Mod,Pre-Mod,Architect,Constructor,Elder,Veteran,Trusted
+on-break=allow,notify
+comment=Player broke ice.
