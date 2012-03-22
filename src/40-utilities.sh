@@ -1,5 +1,5 @@
 #! /bin/bash
-. /home/mc/scripts/init.sh
+. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
 
 case $1 in
 	wgb)
@@ -9,8 +9,8 @@ case $1 in
 		fi
 		if [ "$2" == "reload" ]; then
 			for ((i=0;i<$numworlds;i++)); do
-				echo "Replacing $bukkitdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt with $wgblacklist'"
-				cp $wgblacklist $bukkitdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt'
+				echo "Replacing $serverdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt with $wgblacklist'"
+				cp $wgblacklist $serverdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt'
 				echo ----------------------------------
 			done
 			if isrunning; then
@@ -25,7 +25,7 @@ case $1 in
 		;;
 	pex)
 		if [ "$2" == "edit" ]; then
-			nano $bukkitdir/plugins/PermissionsEx/permissions.yml
+			nano $serverdir/plugins/PermissionsEx/permissions.yml
 			exit
 		fi
 		if [ "$2" == "reload" ]; then
@@ -46,7 +46,7 @@ case $1 in
 			for ((i=0;i<$numworlds;i++)); do
 				rm -rf ${tempdir}ovr-${worlds[$i]}
 				mkdir -p ${tempdir}ovr-${worlds[$i]}
-				cp -pR ${bukkitdir}${worlds[$i]}/* ${tempdir}/ovr-${worlds[$i]}
+				cp -pR ${serverdir}${worlds[$i]}/* ${tempdir}/ovr-${worlds[$i]}
 			done
 			if isrunning; then
 				sendtoscreen "save-on"
@@ -56,7 +56,7 @@ case $1 in
 		;;
 	cmd)
 		if [ "$2" == "edit" ]; then
-			nano ${bukkitdir}plugins/CommandHelper/config.txt
+			nano ${serverdir}plugins/CommandHelper/config.txt
 			exit
 		fi
 		if [ "$2" == "reload" ]; then

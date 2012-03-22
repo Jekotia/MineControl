@@ -6,16 +6,21 @@ startbukkit() {
 		exit 0
 	else
 		echo "Starting Minecraft server..."
-		cd $bukkitdir
+		cd $server_Dir
 
-		echo "-------------------------- Start Entry --------------------------" >> $statuslog
-		echo $dateformat"_"$timeformat "- Server process start logged." >> $statuslog
+		if [ "$log_status_Enable" = "true" ]; then
+			echo "-------------------------- Start Entry --------------------------" >> $statuslog
+			echo $dateformat"_"$timeformat "- Server process start logged." >> $statuslog
+		fi
 
 		if [ "$twitteralerts" == "true" ]; then
 			echo "hascrashed=true" > $twitteralertsfile
 		fi
-
-		echo "forcesave=on" > $forcesavefile
+		
+		if [ "forcesave_Enable" = "true" ]; then
+			echo "forcesave=on" > $forcesavefile
+		fi
+		
 		$bukkitinvocation
 
 		if [ "$twitteralerts" == "true" ]; then
@@ -24,12 +29,17 @@ startbukkit() {
 				twidge update "$twitteralertsstatus"
 			fi
 		fi
-		echo "forcesave=off" > $forcesavefile
-		dateformat="$(date '+%Y-%m-%d')"
-		timeformat="$(date '+%H-%M-%S')"
+		
+		if [ "forcesave_Enable" = "true" ]; then
+			echo "forcesave=off" > $forcesavefile
+		fi
 
-		echo $dateformat"_"$timeformat "- Server process end logged." >> $statuslog
-		echo "--------------------------- End Entry ---------------------------" >> $statuslog
+		if [ "$log_status_Enable" = "true" ]; then
+			dateformat="$(date '+%Y-%m-%d')"
+			timeformat="$(date '+%H-%M-%S')"
+			echo $dateformat"_"$timeformat "- Server process end logged." >> $statuslog
+			echo "--------------------------- End Entry ---------------------------" >> $statuslog
+		fi
 	fi
 }
 
@@ -70,19 +80,19 @@ stopbukkit() {
 #			echo "Process failed to stop!"
 #
 #			# Take more aggresive action against pID
-#			echo "Attempting to kill rogue $bukkitfilename process..."
+#			echo "Attempting to kill rogue $serverfilename process..."
 #
 #			# Get the Process ID of running JAR file
-#			bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$bukkitfilename"`
+#			bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$serverfilename"`
 #			kill ${bukkitPID:0:5}
 #			sleep 1
 #
 #			# Check for process status after pkill attempt
 #			if isrunning; then
-#				echo "$bukkitfilename could not be killed!"
+#				echo "$serverfilename could not be killed!"
 #				exit 1
 #			else
-#				echo "$bukkitfilename process terminated!"
+#				echo "$serverfilename process terminated!"
 #			fi
 #		else
 #			echo "Bukkit server successfully stopped!"

@@ -1,5 +1,5 @@
 #!/bin/bash
-. /home/mc/scripts/init.sh
+. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
 
 help(){
 # echo "Usage: $0 [status|start|stop|restart|friendlystop|resume]"
@@ -11,7 +11,7 @@ case $1 in
 		if isrunning; then
 			echo "Minecraft server currently ONLINE:"
 			# Get the Process ID of running JAR file
-			bukkitPID=`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$bukkitfilename"`
+			bukkitPID=`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`
 
 			# Display process activity information of bukkit (5 character length pID)
 			top -n 1 -p ${bukkitPID:0:5} | grep ${bukkitPID:0:5}
@@ -56,20 +56,20 @@ case $1 in
 				echo "hascrashed=false" > $twitteralertsfile
 				echo $dateformat"_"$timeformat "- Process kill attempt logged." >> $statuslog
 
-				echo "Attempting to kill rogue $bukkitfilename process..."
+				echo "Attempting to kill rogue $serverfilename process..."
 
 				# Get the Process ID of running JAR file
-				bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$bukkitfilename"`
+				bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$serverfilename"`
 				kill -9 ${bukkitPID:0:5}
 				sleep 10
 
 				# Check for process status after pkill attempt
 				if isrunning; then
-					echo "$bukkitfilename could not be killed!"
+					echo "$serverfilename could not be killed!"
 					echo $dateformat"_"$timeformat "- Process kill attempt failed." >> $statuslog
 					exit 1
 				else
-					echo "$bukkitfilename process terminated!"
+					echo "$serverfilename process terminated!"
 					echo $dateformat"_"$timeformat "- Process kill attempt succeeded." >> $statuslog
 				fi
 			fi

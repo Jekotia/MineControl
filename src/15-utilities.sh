@@ -7,7 +7,7 @@ sendtoscreen() {
 }
 
 isrunning() {
-	ps ax | grep -v grep | grep -v screen | grep "$bukkitfilename" > /dev/null
+	ps ax | grep -v grep | grep -v screen | grep "$server_File" > /dev/null
 	return $?
 }
 
@@ -19,7 +19,7 @@ logroll() {
 	if isrunning; then
 		echo "Stop the Minecraft server before rolling logs!"
 	else
-		cd $bukkitdir
+		cd $serverdir
 		for ((i=0;i<$numlogroll;i++)); do
 			mv ${logroll[$i]}.log ${logdir}/${logroll[$i]}/${dateformat}.log
 		done

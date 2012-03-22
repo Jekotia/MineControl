@@ -1,11 +1,11 @@
 #!/bin/bash
 
 serverbackup() {
-    cd $serverbackupdir
-    echo "Backing up entire '$bukkitdir' directory to tar archive..."
-    tar -zcf full_$dateformat_$timeformat.tar.gz $bukkitdir/
+    cd $serverworldbackupdir
+    echo "Backing up entire '$serverdir' directory to tar archive..."
+    tar -zcf full_$dateformat_$timeformat.tar.gz $serverdir/
     echo "Dumping copies of all MySQL data to SQL file..."
-    mysqldump -u $mysqluser -p$mysqlpass --all-databases > $mysqlbackupdir/full_$dateformat_$timeformat.sql
+    mysqldump -u $mysqluser -p$mysqlpass --all-databases > $mysqlworldbackupdir/full_$dateformat_$timeformat.sql
 }
 
 worldbackup() {
@@ -19,12 +19,12 @@ worldbackup() {
       fi
       echo "Creating temp directory '${backuptmp}${worlds[$i]}'..."
       mkdir -p ${backuptmp}${worlds[$i]}/
-      echo "Copying '${bukkitdir}${worlds[$i]}' to '${backuptmp}${worlds[$i]}'..."
-      cp -pR ${bukkitdir}${worlds[$i]} ${backuptmp}
+      echo "Copying '${serverdir}${worlds[$i]}' to '${backuptmp}${worlds[$i]}'..."
+      cp -pR ${serverdir}${worlds[$i]} ${backuptmp}
       echo "Changing to backup dir"
       cd ${backuptmp}
-      echo "Creating zip archive file of '${backuptmp}${worlds[$i]}/' in '${backupdir}${worlds[$i]}/..."
-      zip -v ${backupdir}${worlds[$i]}/${dateformat}_${timeformat}.zip -r ${worlds[$i]}
+      echo "Creating zip archive file of '${backuptmp}${worlds[$i]}/' in '${worldbackupdir}${worlds[$i]}/..."
+      zip -v ${worldbackupdir}${worlds[$i]}/${dateformat}_${timeformat}.zip -r ${worlds[$i]}
       if isrunning; then
         sendtoscreen "save-on"
         sendtoscreen "say Backup of world '${worlds[$i]}' completed."
@@ -53,6 +53,6 @@ worldlogbackup() {
 
 mysqlbackup() {
     cd ~/
-    zip -v backups/`date "+%Y-%m-%d-%H-%M-%S"`.zip -r $bukkitdir
+    zip -v backups/`date "+%Y-%m-%d-%H-%M-%S"`.zip -r $serverdir
     mysqldump -u $mysqluser -p$mysqlpass --all-databases > ~/backups/mysql/full_$dateformat"_"$timeformat.sql
 }

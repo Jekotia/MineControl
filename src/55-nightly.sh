@@ -1,5 +1,5 @@
 #! /bin/bash
-. /home/mc/scripts/init.sh
+. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
 
 case $1 in
     all)
