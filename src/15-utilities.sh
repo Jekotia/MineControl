@@ -2,8 +2,8 @@
 
 sendtoscreen() {
 	#screen -q -S minecraft -p bukkit -X stuff "$1$(echo -ne '\r')" > /dev/null
-	screen -q -S $bukkitscreen -X stuff "`printf "\r"`" #clears the consoles input area prior to sending the intended command
-	screen -q -S $bukkitscreen -X stuff "$1$(echo -ne '\r')" > /dev/null
+	screen -q -S $server_Screen -X stuff "`printf "\r"`" #clears the consoles input area prior to sending the intended command
+	screen -q -S $server_Screen -X stuff "$1$(echo -ne '\r')" > /dev/null
 }
 
 isrunning() {
@@ -12,7 +12,7 @@ isrunning() {
 }
 
 resumebukkit() {
-	screen -x $bukkitscreen
+	screen -x $server_Screen
 }
 
 logroll() {

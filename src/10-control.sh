@@ -21,7 +21,7 @@ startbukkit() {
 			echo "forcesave=on" > $forcesavefile
 		fi
 		
-		$bukkitinvocation
+		$java_Invocation
 
 		if [ "$twitteralerts" == "true" ]; then
 			. $twitteralertsfile
@@ -80,19 +80,19 @@ stopbukkit() {
 #			echo "Process failed to stop!"
 #
 #			# Take more aggresive action against pID
-#			echo "Attempting to kill rogue $serverfilename process..."
+#			echo "Attempting to kill rogue $server_File process..."
 #
 #			# Get the Process ID of running JAR file
-#			bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$serverfilename"`
+#			bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
 #			kill ${bukkitPID:0:5}
 #			sleep 1
 #
 #			# Check for process status after pkill attempt
 #			if isrunning; then
-#				echo "$serverfilename could not be killed!"
+#				echo "$server_File could not be killed!"
 #				exit 1
 #			else
-#				echo "$serverfilename process terminated!"
+#				echo "$server_File process terminated!"
 #			fi
 #		else
 #			echo "Bukkit server successfully stopped!"

@@ -4,28 +4,28 @@
 ### BEGIN CONFIGURATION AREA ###
 ################################
 
+# Stuff only needed in the multi-file dev environment #/
+	script_Dir=~/"Dropbox/GitHub/MineControl/src/" #/
+	var_Dir=~/"Dropbox/GitHub/MineControl/var/" #/
+
 # Module: Core
-		# Essential paths
-			# Path to this script-sets' directory #/
-				script_Dir=~/"Dropbox/GitHub/MineControl/src/" #/
-			# Path to the Minecraft server directory
-				server_Dir=~/"Dropbox/GitHub/MineControl/server/"
-			# Name of the .jar file to run the server with. This MUST be inside the serverdir as set above.
-				server_File="craftbukkit-beta.jar"
-			# Name of the screen session to launch the server in
-				server_Screen="minecraft"
-		# Parameters for starting the Minecraft server
-			# Custom java binary location. Do not change unless custom installation was done, ex: `/opt/java/bin/java`.
-				java_Loc="java"
-			# Max memory for the server to use. This should be a number followed by an 'M' or a 'G', for megabytes or gigabytes
-			# e.g. 1000M is the same as 1G.
-				java_Mem="1000M"
-			# Additional arguments for java.
-			# -server is automatically implied on servers, and -Xincgc is recommended for better garbage collection
-				java_Args="-server -Xincgc"
+	# Essential paths
+		# Path to the Minecraft server directory
+			server_Dir=~/"Dropbox/GitHub/MineControl/server/"
+		# Name of the .jar file to run the server with. This MUST be inside the serverdir as set above.
+			server_File="craftbukkit-beta.jar"
+		# Name of the screen session to launch the server in
+			server_Screen="minecraft"
+	# Parameters for starting the Minecraft server
+		# Custom java binary location. Do not change unless custom installation was done, ex: `/opt/java/bin/java`.
+			java_Loc="java"
+		# Max memory for the server to use. This should be a number followed by an 'M' or a 'G', for megabytes or gigabytes
+		# e.g. 1000M is the same as 1G.
+			java_Mem="1000M"
+		# Additional arguments for java.
+		# -server is automatically implied on servers, and -Xincgc is recommended for better garbage collection
+			java_Args="-server -Xincgc"
 
-
-		var_Dir=~/"Dropbox/GitHub/MineControl/var/" #/
 		forcesave_Enable="false"
 
 # Module: Logs
@@ -71,7 +71,26 @@
 #### END CONFIGURATION AREA ####
 ################################
 
-bukkitinvocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui"
+if [ ! -d "$server_Dir" ]; then
+    echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
+	_error="true"
+fi
+
+if [ ! -f "$server_Dir$server_File" ]; then
+    echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
+	_error="true"
+fi
+
+if [ ! -f "$java_Loc" ]; then
+    echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
+	_error="true"
+fi
+
+if [ "$_error" = "true" ]; then
+	exit
+fi
+
+java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui"
 
 # var_Dir=$script_Dir"var/" # To be uncommented in releases
 
@@ -81,6 +100,7 @@ twitteralertsfile=${var_Dir}"twitteralerts.sh"
 logroll_Dir=~/"Dropbox/GitHub/MineControl/logs/server/"
 statuslog=${log_Dir}"status.log"
 
+# Directory checks
 if [ ! -d "$logroll_Dir" ] && [ "$logroll_Enable" = "true" ]; then
     mkdir -p $logroll_Dir
 fi

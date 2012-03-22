@@ -56,20 +56,20 @@ case $1 in
 				echo "hascrashed=false" > $twitteralertsfile
 				echo $dateformat"_"$timeformat "- Process kill attempt logged." >> $statuslog
 
-				echo "Attempting to kill rogue $serverfilename process..."
+				echo "Attempting to kill rogue $server_File process..."
 
 				# Get the Process ID of running JAR file
-				bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$serverfilename"`
+				bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
 				kill -9 ${bukkitPID:0:5}
 				sleep 10
 
 				# Check for process status after pkill attempt
 				if isrunning; then
-					echo "$serverfilename could not be killed!"
+					echo "$server_File could not be killed!"
 					echo $dateformat"_"$timeformat "- Process kill attempt failed." >> $statuslog
 					exit 1
 				else
-					echo "$serverfilename process terminated!"
+					echo "$server_File process terminated!"
 					echo $dateformat"_"$timeformat "- Process kill attempt succeeded." >> $statuslog
 				fi
 			fi

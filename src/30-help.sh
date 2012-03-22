@@ -3,7 +3,7 @@
 case $1 in
     server)
         echo "-------------------------------------------------------------------------"
-        echo "'MC status' returns process info from 'ps' and 'top' about to the server."
+        echo "'MC status' returns process info from 'ps' and 'top' about the server."
         echo "'MC start' starts the server in a screen session."
         echo "'MC stop' sends the stop command to the screen session."
         echo "'MC resume' attachs your SSH session to the screen session."
