@@ -4,6 +4,7 @@ src/ contains the source scripts used for development and testing, as it is far 
 The files in src/ are not recommended for 'production' server use. Use them at your own risk.
 'Stable' all-in-one bash script files will be found in this repo's 'root' directory when they are ready.
 
+----------
 Changelog
 1.0 - 2012/03/22 - 8:00PM EST
 
