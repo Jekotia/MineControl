@@ -9,8 +9,9 @@ if [ ! -d "$minecontrol_Dir" ]; then
 fi
 
 if [ ! -f "${minecontrol_Dir}minecontrol.conf" ]; then
-	echo "${minecontrol_Dir}minecontrol.conf does not exist. Downloading latest minecontrol.conf"
-	wget -O $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/dl/minecontrol.conf
+	echo "${minecontrol_Dir}minecontrol.conf does not exist. Downloading latest minecontrol.conf..."
+	wget -O $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/minecontrol-latest.conf && echo "$minecontrol_Conf successfully downloaded. You should edit the file"
+	exit 0
 fi
 
 source $minecontrol_Conf
