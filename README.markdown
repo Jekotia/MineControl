@@ -5,5 +5,5 @@ The files in src/ are not recommended for 'production' server use. Use them at y
 'Stable' all-in-one bash script files will be found in this repo's 'root' directory when they are ready.
 
 Changelog
-1.0 - 2012/03/22 - 7:00PM EST
+1.0 - 2012/03/22 - 8:00PM EST
 * Initial release. Features basic server operation.
