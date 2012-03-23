@@ -26,17 +26,17 @@ minecontrol_Version="1.0" # By Jekotia https://github.com/Jekotia/MineControl
 #### END CONFIGURATION AREA ####
 ################################
 if [ ! -d "$server_Dir" ]; then
-    echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
+	echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
 	_error="true"
 fi
 
 if [ ! -f "$server_Dir$server_File" ]; then
-    echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
+	echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
 	_error="true"
 fi
 
 if [ ! -f "$java_Loc" ]; then
-    echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
+	echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
 	_error="true"
 fi
 
@@ -110,7 +110,7 @@ case $1 in
 			screen -x $server_Screen
 			exit 0
 		fi
-        ;;
+		;;
 	start-now)
 		startbukkit
 		;;
@@ -157,17 +157,17 @@ case $1 in
 		echo "This is version 1.0 of MineControl by Jekotia."
 		echo "Source is available at https://github.com/Jekotia/MineControl"
 		;;
-    help)
-        echo "-------------------------------------------------------------------------"
-        echo "'$0 status' returns process info from 'ps' and 'top' about the server."
-        echo "'$0 start' starts the server in a screen session."
-        echo "'$0 stop' sends the stop command to the screen session."
-        echo "'$0 resume' attachs your SSH session to the screen session."
-        echo "'$0 kill' kills the server process."
+	help)
+		echo "-------------------------------------------------------------------------"
+		echo "'$0 status' returns process info from 'ps' and 'top' about the server."
+		echo "'$0 start' starts the server in a screen session."
+		echo "'$0 stop' sends the stop command to the screen session."
+		echo "'$0 resume' attachs your SSH session to the screen session."
+		echo "'$0 kill' kills the server process."
 		echo "'$0 help' shows this information."
 		echo "'$0 version' shows this information."
-        echo "-------------------------------------------------------------------------"
-        ;;
+		echo "-------------------------------------------------------------------------"
+		;;
 	*)
 		echo "Usage: $0 <status|start|stop|resume|kill|help>"
 esac
