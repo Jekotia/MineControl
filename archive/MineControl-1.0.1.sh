@@ -160,7 +160,7 @@ case $1 in
 		fi
 		;;
 	version)
-		echo "This is version 1.0 of MineControl by Jekotia."
+		echo "This is version $minecontrol_Version of MineControl by Jekotia."
 		echo "Source is available at https://github.com/Jekotia/MineControl"
 		;;
 	help)
