@@ -102,15 +102,15 @@ case $1 in
 			exit
 		fi
 		;;
-    start)
-        if isrunning; then
-            echo "Minecraft server is already running."
-            exit 0
-        else
-            screen -dmS $server_Screen bash $0 start-now
-            screen -x $server_Screen
-            exit 0
-        fi
+	start)
+		if isrunning; then
+			echo "Minecraft server is already running."
+			exit 0
+		else
+			screen -dmS $server_Screen bash $0 start-now
+			screen -x $server_Screen
+			exit 0
+		fi
         ;;
 	start-now)
 		startbukkit
