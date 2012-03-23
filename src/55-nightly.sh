@@ -1,6 +1,3 @@
-#! /bin/bash
-. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
-
 case $1 in
 	all)
 		if isrunning; then

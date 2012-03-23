@@ -1,6 +1,3 @@
-#! /bin/bash
-. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
-
 if isrunning; then
 	. $forcesavefile
 	if [ "$forcesave" == "on" ]; then

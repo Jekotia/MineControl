@@ -1,6 +1,3 @@
-#!/bin/bash
-. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
-
 help(){
 # echo "Usage: $0 [status|start|stop|restart|friendlystop|resume]"
 	echo "Usage: MC <status|start|stop|resume|kill>"
@@ -43,6 +40,10 @@ case $1 in
 		server_Resume
 		;;
 	kill)
+		if ! isrunning; then
+			echo "No server process detected."
+			exit
+		fi
 		var1="no"
 		echo -n "Are you sure you want to do this? [NO/yes] "
 		read var1

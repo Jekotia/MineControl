@@ -1,5 +1,3 @@
-#!/bin/bash
-
 sendtoscreen() {
 	screen -q -S $server_Screen -X stuff "`printf "\r"`" #clears the consoles input area prior to sending the intended command
 	screen -q -S $server_Screen -X stuff "$1$(echo -ne '\r')" > /dev/null

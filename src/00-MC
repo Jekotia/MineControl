@@ -1,24 +1,96 @@
 #!/bin/bash
-. ${HOME}/Dropbox/GitHub/MineControl/src/05-init.sh
+minecontrol_Version="Dev" # By Jekotia https://github.com/Jekotia/MineControl
+minecontrol_Dir=~/".minecontrol"
+minecontrol_Conf=~/".minecontrol/minecontrol.conf"
+
+if [ ! -d "$minecontrol_Dir" ]; then
+	echo "Creating ~/.minecontrol/"
+	mkdir $minecontrol_Dir
+fi
+
+if [ ! -f "${minecontrol_Dir}minecontrol.conf" ]; then
+	echo "${minecontrol_Dir}minecontrol.conf does not exist. Downloading latest minecontrol.conf"
+	wget -O $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/dl/minecontrol.conf
+fi
+
+source $minecontrol_Conf
+# Lines ending with #/ are marked to be removed from single-file releases as they only pertain to development & testing in a multiple-file environment
+
+# Stuff only needed in the multi-file dev environment #/
+script_Dir=~/"Dropbox/GitHub/MineControl/src/" #/
+var_Dir=~/"Dropbox/GitHub/MineControl/var/" #/
+
+if [ ! -d "$server_Dir" ]; then
+	echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
+	_error="true"
+fi
+
+if [ ! -f "$server_Dir$server_File" ]; then
+	echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
+	_error="true"
+fi
+
+command -v $java_Loc >/dev/null || java_err_1="true"
+
+if [ ! -f "$java_Loc" ]; then
+	java_err_2="true"
+fi
+
+if [ "$java_err_1" = "true" ] && [ "$java_err_2" = "true" ]; then
+	echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
+	_error="true"
+fi
+
+if [ "$_error" = "true" ]; then
+	exit 0
+fi
+
+java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui"
+
+# var_Dir=$script_Dir"var/" # To be uncommented in releases
+
+forcesavefile=${var_Dir}"forcesave.sh"
+twitteralertsfile=${var_Dir}"twitteralerts.sh"
+
+logroll_Dir=~/"Dropbox/GitHub/MineControl/logs/server/"
+statuslog=${log_Dir}"status.log"
+
+# Directory checks
+if [ ! -d "$logroll_Dir" ] && [ "$logroll_Enable" = "true" ]; then
+	mkdir -p $logroll_Dir
+fi
+
+if [ ! -d "$log_Dir" ] && [ "$log_status_Enable" = "true" ]; then
+	mkdir -p $log_Dir
+fi
+
+if [ ! -d "${var_Dir}" ] && [ "$forcesave_Enable" = "true" ]; then
+	mkdir -p ${var_Dir}
+fi
+
+. ${script_Dir}"10-control.sh" #/
+. ${script_Dir}"15-utilities.sh" #/
+. ${script_Dir}"20-backup.sh" #/
+. ${script_Dir}"25-common.sh" #/
 
 mcbin=${script_Dir}"35-server.sh"
 
 interactive(){
-  echo "[1] View server status."
-  echo "[2] Start the server."
-  echo "[3] Stop the server."
-  echo "[4] Attach to the servers' screen session."
-  echo -n "What would you like to do? "
-  read var2
-  if [ "$var2" == "1" ]; then
-	MC status
-  elif [ "$var2" == "2" ]; then
-	MC start
-  elif [ "$var2" == "3" ]; then
-	MC stop
-  elif [ "$var2" == "4" ]; then
-	MC resume
-  fi
+	echo "[1] View server status."
+	echo "[2] Start the server."
+	echo "[3] Stop the server."
+	echo "[4] Attach to the servers' screen session."
+	echo -n "What would you like to do? "
+	read var2
+	if [ "$var2" == "1" ]; then
+		MC status
+	elif [ "$var2" == "2" ]; then
+		MC start
+	elif [ "$var2" == "3" ]; then
+		MC stop
+	elif [ "$var2" == "4" ]; then
+		MC resume
+	fi
 }
 
 case $1 in
@@ -52,6 +124,10 @@ case $1 in
 		interactive
 		exit 0
 		;;
+	version)
+		echo "This is version $minecontrol_Version of MineControl by Jekotia."
+		echo "Source is available at https://github.com/Jekotia/MineControl"
+		;;
 	*)
 		bash $mcbin help
 		echo "You can also use the '-i' parameter to run this script in interactive mode."
@@ -60,7 +136,7 @@ case $1 in
 		var1="n"
 		read var1
 		if [ "$var1" == "y" ]; then
-		  interactive
+			interactive
 		fi
 esac
 
