@@ -15,12 +15,17 @@ You will need to install:
 You should already have:
 
 * bash
-* busybox (this is responsible for many of the standard *nix commands)
+* busybox (Needed for: echo, grep, kill, ps, sleep, and top. This is responsible for many of the standard *nix commands).
+* command
 
 Note that these scripts as a suite MUST be run using **bash**, not sh.
 
 ----------
 ## Changelog ##
+1.0.1 - 2012/03/22 - 10:00PM EST
+
+* Improved check for the java binary at the users specified location.
+
 1.0 - 2012/03/22 - 8:00PM EST
 
 * Initial release. Features basic server operation.
