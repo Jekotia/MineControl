@@ -9,15 +9,15 @@ case $1 in
 		fi
 		if [ "$2" == "reload" ]; then
 			for ((i=0;i<$numworlds;i++)); do
-				echo "Replacing $serverdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt with $wgblacklist'"
-				cp $wgblacklist $serverdir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt'
+				echo "Replacing $server_Dir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt with $wgblacklist'"
+				cp $wgblacklist $server_Dir'plugins/WorldGuard/worlds/'${worlds[$i]}'/blacklist.txt'
 				echo ----------------------------------
 			done
 			if isrunning; then
 				sendtoscreen "wg reload"
 				echo "WorldGuard reload command sent to server."
 				echo ----------------------------------
-				resumebukkit
+				server_Resume
 			fi
 			exit
 		fi
@@ -25,14 +25,14 @@ case $1 in
 		;;
 	pex)
 		if [ "$2" == "edit" ]; then
-			nano $serverdir/plugins/PermissionsEx/permissions.yml
+			nano $server_Dir/plugins/PermissionsEx/permissions.yml
 			exit
 		fi
 		if [ "$2" == "reload" ]; then
 			if isrunning; then
 				sendtoscreen "pex reload"
 				echo "PermissionsEx reload command sent to server."
-				resumebukkit
+				server_Resume
 			fi
 			exit
 		fi
@@ -46,7 +46,7 @@ case $1 in
 			for ((i=0;i<$numworlds;i++)); do
 				rm -rf ${tempdir}ovr-${worlds[$i]}
 				mkdir -p ${tempdir}ovr-${worlds[$i]}
-				cp -pR ${serverdir}${worlds[$i]}/* ${tempdir}/ovr-${worlds[$i]}
+				cp -pR ${server_Dir}${worlds[$i]}/* ${tempdir}/ovr-${worlds[$i]}
 			done
 			if isrunning; then
 				sendtoscreen "save-on"
@@ -56,14 +56,14 @@ case $1 in
 		;;
 	cmd)
 		if [ "$2" == "edit" ]; then
-			nano ${serverdir}plugins/CommandHelper/config.txt
+			nano ${server_Dir}plugins/CommandHelper/config.txt
 			exit
 		fi
 		if [ "$2" == "reload" ]; then
 			if isrunning; then
 				sendtoscreen "reloadaliases"
 				echo "CommandHelper reload command sent to server."
-				resumebukkit
+				server_Resume
 			fi
 			exit
 		fi

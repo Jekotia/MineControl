@@ -11,28 +11,28 @@ case $1 in
 		if isrunning; then
 			echo "Minecraft server currently ONLINE:"
 			# Get the Process ID of running JAR file
-			bukkitPID=`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`
+			serverPID=`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`
 
-			# Display process activity information of bukkit (5 character length pID)
-			top -n 1 -p ${bukkitPID:0:5} | grep ${bukkitPID:0:5}
+			# Display process activity information of java (5 character length pID)
+			top -n 1 -p ${serverPID:0:5} | grep ${serverPID:0:5}
 
-			# Display prcoess infomation of bukkit
-			echo "$bukkitPID"
+			# Display process infomation of java
+			echo "$serverPID"
 		else
 			echo "Minecraft server currently OFFLINE"
 			exit
 		fi
 		;;
 	start)
-		startbukkit
+		server_Start
 		;;
 	stop)
-		stopbukkit
+		server_Stop
 		;;
 	restart)
-		#stopbukkit
+		#server_Stop
 		#sleep 5
-		#startbukkit
+		#server_Start
 		echo "Needs testing still. Sorry!"
 		;;
 	friendlystop)
@@ -40,7 +40,7 @@ case $1 in
 		echo "Needs testing still. Sorry!"
 		;;
 	resume)
-		resumebukkit
+		server_Resume
 		;;
 	kill)
 		var1="no"
@@ -59,8 +59,8 @@ case $1 in
 				echo "Attempting to kill rogue $server_File process..."
 
 				# Get the Process ID of running JAR file
-				bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
-				kill -9 ${bukkitPID:0:5}
+				serverPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
+				kill -9 ${serverPID:0:5}
 				sleep 10
 
 				# Check for process status after pkill attempt

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Lines ending with #/ are marked to be removed from single-file releases as they only pertain to development & testing in a multiple-file environment
+minecontrol_Version="Dev" # By Jekotia https://github.com/Jekotia/MineControl
 ################################
 ### BEGIN CONFIGURATION AREA ###
 ################################
@@ -12,7 +13,7 @@
 	# Essential paths
 		# Path to the Minecraft server directory
 			server_Dir=~/"Dropbox/GitHub/MineControl/server/"
-		# Name of the .jar file to run the server with. This MUST be inside the serverdir as set above.
+		# Name of the .jar file to run the server with. This MUST be inside the server_Dir as set above.
 			server_File="craftbukkit-beta.jar"
 		# Name of the screen session to launch the server in
 			server_Screen="minecraft"
@@ -62,7 +63,7 @@
 	declare -a worlds=(globalspawn anoreth nether)
 	numworlds=${#worlds[@]}
 
-# List the locations of .log files relative to $serverdir that you wish to be "rolled over" by the logroll function.
+# List the locations of .log files relative to $server_Dir that you wish to be "rolled over" by the logroll function.
 # Do NOT include a file extension or try and use this for non .log files.
 	declare -a logroll=(server worldedit)
 	numlogroll=${#logroll[@]}
@@ -70,19 +71,24 @@
 ################################
 #### END CONFIGURATION AREA ####
 ################################
-
 if [ ! -d "$server_Dir" ]; then
-    echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
+	echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
 	_error="true"
 fi
 
 if [ ! -f "$server_Dir$server_File" ]; then
-    echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
+	echo "Error: The Minecraft server file specified for server_File ($server_File) does not exist."
 	_error="true"
 fi
 
+command -v $java_Loc >/dev/null || java_err_1="true"
+
 if [ ! -f "$java_Loc" ]; then
-    echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
+	java_err_2="true"
+fi
+
+if [ "$java_err_1" = "true" ] && [ "$java_err_2" = "true" ]; then
+	echo "Error: The java binary specified for java_Loc ($java_Loc) does not exist."
 	_error="true"
 fi
 
@@ -102,15 +108,15 @@ statuslog=${log_Dir}"status.log"
 
 # Directory checks
 if [ ! -d "$logroll_Dir" ] && [ "$logroll_Enable" = "true" ]; then
-    mkdir -p $logroll_Dir
+	mkdir -p $logroll_Dir
 fi
 
 if [ ! -d "$log_Dir" ] && [ "$log_status_Enable" = "true" ]; then
-    mkdir -p $log_Dir
+	mkdir -p $log_Dir
 fi
 
 if [ ! -d "${var_Dir}" ] && [ "$forcesave_Enable" = "true" ]; then
-    mkdir -p ${var_Dir}
+	mkdir -p ${var_Dir}
 fi
 
 . ${script_Dir}"10-control.sh" #/

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 sendtoscreen() {
-	#screen -q -S minecraft -p bukkit -X stuff "$1$(echo -ne '\r')" > /dev/null
 	screen -q -S $server_Screen -X stuff "`printf "\r"`" #clears the consoles input area prior to sending the intended command
 	screen -q -S $server_Screen -X stuff "$1$(echo -ne '\r')" > /dev/null
 }
@@ -11,7 +10,7 @@ isrunning() {
 	return $?
 }
 
-resumebukkit() {
+server_Resume() {
 	screen -x $server_Screen
 }
 
@@ -19,7 +18,7 @@ logroll() {
 	if isrunning; then
 		echo "Stop the Minecraft server before rolling logs!"
 	else
-		cd $serverdir
+		cd $server_Dir
 		for ((i=0;i<$numlogroll;i++)); do
 			mv ${logroll[$i]}.log ${logdir}/${logroll[$i]}/${dateformat}.log
 		done

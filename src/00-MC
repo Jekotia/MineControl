@@ -11,57 +11,57 @@ interactive(){
   echo -n "What would you like to do? "
   read var2
   if [ "$var2" == "1" ]; then
-    MC status
+	MC status
   elif [ "$var2" == "2" ]; then
-    MC start
+	MC start
   elif [ "$var2" == "3" ]; then
-    MC stop
+	MC stop
   elif [ "$var2" == "4" ]; then
-    MC resume
+	MC resume
   fi
 }
 
 case $1 in
-    status)
-        bash $mcbin status
-        exit 0
-        ;;
-    start)
-        if isrunning; then
-            echo "Minecraft server is already running."
-            exit 0
-        else
-            screen -dmS $server_Screen bash $mcbin start
-            screen -x $server_Screen
-            exit 0
-        fi
-        ;;
-    stop)
-        bash $mcbin stop
-        exit 0
-        ;;
-    resume)
-        bash $mcbin resume
-        exit 0
-        ;;
-    kill)
-        bash $mcbin kill
-        exit 0
-        ;;
-    -i)
-        interactive
-        exit 0
-        ;;
-    *)
-        bash $mcbin help
-        echo "You can also use the '-i' parameter to run this script in interactive mode."
-        echo "You executed this script without any parameters."
-        echo -n "Would you like to run it in interactive mode? [y/n] "
-        var1="n"
-        read var1
-        if [ "$var1" == "y" ]; then
-          interactive
-        fi
+	status)
+		bash $mcbin status
+		exit 0
+		;;
+	start)
+		if isrunning; then
+			echo "Minecraft server is already running."
+			exit 0
+		else
+			screen -dmS $server_Screen bash $mcbin start
+			screen -x $server_Screen
+			exit 0
+		fi
+		;;
+	stop)
+		bash $mcbin stop
+		exit 0
+		;;
+	resume)
+		bash $mcbin resume
+		exit 0
+		;;
+	kill)
+		bash $mcbin kill
+		exit 0
+		;;
+	-i)
+		interactive
+		exit 0
+		;;
+	*)
+		bash $mcbin help
+		echo "You can also use the '-i' parameter to run this script in interactive mode."
+		echo "You executed this script without any parameters."
+		echo -n "Would you like to run it in interactive mode? [y/n] "
+		var1="n"
+		read var1
+		if [ "$var1" == "y" ]; then
+		  interactive
+		fi
 esac
 
 exit 0

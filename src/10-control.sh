@@ -1,6 +1,6 @@
 #!/bin/bash
 
-startbukkit() {
+server_Start() {
 	if isrunning; then
 		echo "Minecraft server is already running."
 		exit 0
@@ -43,7 +43,7 @@ startbukkit() {
 	fi
 }
 
-stopbukkit() {
+server_Stop() {
 	if isrunning; then
 		# Check for friendlystop trigger; wait if so
 		if [ "$1" = "friendly" ]; then
@@ -66,11 +66,8 @@ stopbukkit() {
 		echo "forcesave=off" > $forcesavefile
 		sendtoscreen "save-all"
 		sendtoscreen "stop"
-		resumebukkit
-		# Screen's 'bukkit' window will persist after server stop,
-		# this will exit the window. Should not affect tmux as
-		# it's window 'bukkit' is already gone.
-		sleep 1
+		server_Resume
+		sleep 2
 		sendtoscreen "exit"
 ######
 #		# Check for process status, waiting 5 seconds for shutdown procedure to finish
@@ -83,8 +80,8 @@ stopbukkit() {
 #			echo "Attempting to kill rogue $server_File process..."
 #
 #			# Get the Process ID of running JAR file
-#			bukkitPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
-#			kill ${bukkitPID:0:5}
+#			serverPID=`ps ax | grep -v grep | grep -v -i tmux | grep -v sh | grep "$server_File"`
+#			kill ${serverPID:0:5}
 #			sleep 1
 #
 #			# Check for process status after pkill attempt
@@ -95,11 +92,11 @@ stopbukkit() {
 #				echo "$server_File process terminated!"
 #			fi
 #		else
-#			echo "Bukkit server successfully stopped!"
+#			echo "Minecraft server successfully stopped!"
 #		fi
 ######
 	else
-		echo "Bukkit server is not running."
+		echo "Minecraft server is not running."
 		exit 0
 	fi
 }
