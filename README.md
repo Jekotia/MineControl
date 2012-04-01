@@ -6,6 +6,27 @@ See *MineControl-latest.sh* for the latest stable release.
 Previous releases will be found in *archive/*.
 
 ----------
+## Features ##
+
+* Easy to configure
+* Reliable server control:
+* * Runs server in screen session
+* * Start server
+* * Properly stop server
+* * Terminate server process (has built-in safe-guards to prevent accidential use)
+
+----------
+## Planned Features ##
+
+* Backups
+* Force saves with fore-warnings (for use with cron)
+* Nightly restart with log file rotation (for use with cron)
+* Minecraft Overviewer support for easier scheduled rendering
+* Option to run server in a loop (automatic restart in the event of a crash)
+* Interactive mode
+* Support for various plugins where it may be helpful (i.e. better WorldGuard blacklist editing, copies new blacklist.txt to each worlds directory under WorldGuard/worlds/).
+
+----------
 ## Requirements ##
 
 You will need to install:
