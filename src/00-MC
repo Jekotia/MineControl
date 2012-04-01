@@ -20,7 +20,8 @@ fi
 
 if [ ! -f "$minecontrol_Conf" ]; then # Checks if $minecontrol_Conf doesn't exist
 	echo "$minecontrol_Conf does not exist. Downloading latest minecontrol.conf..."
-	wget -vO $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/MineControl-Latest.conf && echo "$minecontrol_Conf successfully downloaded. You should edit this file to suit your setup. Use '$0 config' to open the config file for editing at any time." || echo "Failed to download minecontrol.conf!" # Downloads the latest conf file from GitHub
+	cd $minecontrol_Dir
+	wget -v https://raw.github.com/Jekotia/MineControl/master/MineControl-latest.conf && mv MineControl-latest.conf minecontrol.conf && echo "$minecontrol_Conf successfully downloaded. You should edit this file to suit your setup. Use '$0 config' to open the config file for editing at any time." || echo "Failed to download minecontrol.conf!" # Downloads the latest conf file from GitHub
 	exit 0
 fi
 
