@@ -9,10 +9,10 @@ Previous releases will be found in *archive/*.
 
 * Easy to configure
 * Reliable server control:
-* * Runs server in screen session
-* * Start server
-* * Properly stop server
-* * Terminate server process (has built-in safe-guards to prevent accidential use)
+ * Runs server in screen session
+ * Start server
+ * Properly stop server
+ * Terminate server process (has built-in safe-guards to prevent accidential use)
 
 ## Planned Features ##
 
