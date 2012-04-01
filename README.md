@@ -5,7 +5,6 @@ See *MineControl-latest.sh* for the latest stable release.
 
 Previous releases will be found in *archive/*.
 
-----------
 ## Features ##
 
 * Easy to configure
@@ -15,7 +14,6 @@ Previous releases will be found in *archive/*.
 * * Properly stop server
 * * Terminate server process (has built-in safe-guards to prevent accidential use)
 
-----------
 ## Planned Features ##
 
 * Backups
@@ -26,7 +24,6 @@ Previous releases will be found in *archive/*.
 * Interactive mode
 * Support for various plugins where it may be helpful (i.e. better WorldGuard blacklist editing, copies new blacklist.txt to each worlds directory under WorldGuard/worlds/).
 
-----------
 ## Requirements ##
 
 You will need to install:
@@ -41,7 +38,6 @@ You should already have:
 
 Note that these scripts as a suite MUST be run using **bash**, not sh.
 
-----------
 ## Changelog ##
 1.0.2 - 2012/03/31 - 10:30 PM EST
 
