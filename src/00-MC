@@ -1,25 +1,30 @@
 #!/bin/bash
-minecontrol_Version="Dev" # By Jekotia https://github.com/Jekotia/MineControl
-minecontrol_Dir=~/".minecontrol"
-minecontrol_Conf=~/".minecontrol/minecontrol.conf"
+# Lines ending with #/ are marked to be removed from single-file releases as they only pertain to development & testing in a multiple-file environment
 
-if [ ! -d "$minecontrol_Dir" ]; then
+minecontrol_Version="Dev" # By Jekotia https://github.com/Jekotia/MineControl
+minecontrol_Dir=~/".minecontrol/"
+minecontrol_var_Dir=$minecontrol_Dir"var/"
+minecontrol_Conf=$minecontrol_Dir"minecontrol.conf"
+minecontrol_Conf=~/"Dropbox/GitHub/MineControl/src/minecontrol.conf " #/
+
+# Key checks
+if [ ! -d "$minecontrol_Dir" ]; then # Checks if $minecontrol_Dir doesn't exist
 	echo "Creating ~/.minecontrol/"
 	mkdir $minecontrol_Dir
 fi
 
-if [ ! -f "${minecontrol_Dir}minecontrol.conf" ]; then
-	echo "${minecontrol_Dir}minecontrol.conf does not exist. Downloading latest minecontrol.conf..."
-	wget -O $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/minecontrol-latest.conf && echo "$minecontrol_Conf successfully downloaded. You should edit the file"
+if [ ! -d "${minecontrol_var_Dir}" ]; then # Checks if $minecontrol_var_Dir doesn't exist
+	echo "Creating ~/.minecontrol/var/"
+	mkdir -p $minecontrol_var_Dir
+fi
+
+if [ ! -f "$minecontrol_Conf" ]; then # Checks if $minecontrol_Conf doesn't exist
+	echo "$minecontrol_Conf does not exist. Downloading latest minecontrol.conf..."
+	wget -vO $minecontrol_Conf https://raw.github.com/Jekotia/MineControl/master/MineControl-Latest.conf && echo "$minecontrol_Conf successfully downloaded. You should edit this file to suit your setup. Use '$0 config' to open the config file for editing at any time." || echo "Failed to download minecontrol.conf!" # Downloads the latest conf file from GitHub
 	exit 0
 fi
 
-source $minecontrol_Conf
-# Lines ending with #/ are marked to be removed from single-file releases as they only pertain to development & testing in a multiple-file environment
-
-# Stuff only needed in the multi-file dev environment #/
-script_Dir=~/"Dropbox/GitHub/MineControl/src/" #/
-var_Dir=~/"Dropbox/GitHub/MineControl/var/" #/
+source $minecontrol_Conf # Includes the conf file
 
 if [ ! -d "$server_Dir" ]; then
 	echo "Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
@@ -42,11 +47,22 @@ if [ "$java_err_1" = "true" ] && [ "$java_err_2" = "true" ]; then
 	_error="true"
 fi
 
-if [ "$_error" = "true" ]; then
+# Tests for logging features
+if [ ! -d "$logroll_Dir" ] && [ "$log_roll_Enable" = "true" ]; then
+	echo "Creating ~/.minecontrol/${log_roll_Dir}"
+	mkdir -p $log_roll_Dir
+fi
+
+if [ ! -d "$log_Dir" ] && [ "$log_status_Enable" = "true" ]; then
+	mkdir -p $log_status_Dir
+fi
+
+# End of tests
+if [ "$_error" = "true" ]; then # If any of the tests failed, stop the script.
 	exit 0
 fi
 
-java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui"
+java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
 
 # var_Dir=$script_Dir"var/" # To be uncommented in releases
 
@@ -56,19 +72,7 @@ twitteralertsfile=${var_Dir}"twitteralerts.sh"
 logroll_Dir=~/"Dropbox/GitHub/MineControl/logs/server/"
 statuslog=${log_Dir}"status.log"
 
-# Directory checks
-if [ ! -d "$logroll_Dir" ] && [ "$logroll_Enable" = "true" ]; then
-	mkdir -p $logroll_Dir
-fi
-
-if [ ! -d "$log_Dir" ] && [ "$log_status_Enable" = "true" ]; then
-	mkdir -p $log_Dir
-fi
-
-if [ ! -d "${var_Dir}" ] && [ "$forcesave_Enable" = "true" ]; then
-	mkdir -p ${var_Dir}
-fi
-
+script_Dir=~/"Dropbox/GitHub/MineControl/src/" #/
 . ${script_Dir}"10-control.sh" #/
 . ${script_Dir}"15-utilities.sh" #/
 . ${script_Dir}"20-backup.sh" #/
@@ -82,14 +86,14 @@ interactive(){
 	echo "[3] Stop the server."
 	echo "[4] Attach to the servers' screen session."
 	echo -n "What would you like to do? "
-	read var2
-	if [ "$var2" == "1" ]; then
+	read int1
+	if [ "$int1" == "1" ]; then
 		MC status
-	elif [ "$var2" == "2" ]; then
+	elif [ "$int1" == "2" ]; then
 		MC start
-	elif [ "$var2" == "3" ]; then
+	elif [ "$int1" == "3" ]; then
 		MC stop
-	elif [ "$var2" == "4" ]; then
+	elif [ "$int1" == "4" ]; then
 		MC resume
 	fi
 }
@@ -124,6 +128,9 @@ case $1 in
 	-i)
 		interactive
 		exit 0
+		;;
+	config)
+		$editor_Text $minecontrol_Conf
 		;;
 	version)
 		echo "This is version $minecontrol_Version of MineControl by Jekotia."
