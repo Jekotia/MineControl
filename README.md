@@ -36,7 +36,7 @@ You should already have:
 * busybox (Needed for: echo, grep, kill, ps, sleep, and top. This is responsible for many of the standard *nix commands. If you don't already have this, something is horribly wrong).
 * command
 
-Note that these scripts as a suite MUST be run using **bash**, not sh.
+Note that MineControl MUST be run using **bash**, not sh.
 
 ## Changelog ##
 1.0.2 - 2012/03/31 - 10:30 PM EST
