@@ -1,5 +1,4 @@
-*src/* contains the source scripts used for development and testing, as it is far easier to work on this suite as multiple files instead of one.
-The files in *src/* are not recommended for 'production' server use. Use them at your own risk.
+Current version: 1.0.3
 
 See *MineControl-latest.sh* for the latest stable release.
 
@@ -13,16 +12,22 @@ Previous releases will be found in *archive/*.
  * Start server
  * Properly stop server
  * Terminate server process (has built-in safe-guards to prevent accidential use)
+* Advanced log functionality
+ * Can log server starts/stops with timestamp, as well as stop and kill attempts via MineControl.
+ * Can 'roll' server.log and worldedit.log into timestamped files.
 
 ## Planned Features ##
-
-* Backups
-* Force saves with fore-warnings (for use with cron)
-* Nightly restart with log file rotation (for use with cron)
-* Minecraft Overviewer support for easier scheduled rendering
-* Option to run server in a loop (automatic restart in the event of a crash)
-* Interactive mode
-* Support for various plugins where it may be helpful (i.e. better WorldGuard blacklist editing, copies new blacklist.txt to each worlds directory under WorldGuard/worlds/).
+* 1.0.4
+ * Option to run server in a loop (automatic restart in the event of a crash)
+ * Support for Twidge-based (Twitter) server status notifications
+ * Minecraft Overviewer support for easier scheduled rendering
+* 1.1
+ * Backups
+* Long-Term
+ * Force saves with fore-warnings (for use with cron)
+ * Nightly restart with log file rotation (for use with cron)
+ * Interactive mode
+ * Support for various plugins where it may be helpful (i.e. better WorldGuard blacklist editing, copies new blacklist.txt to each worlds directory under WorldGuard/worlds/).
 
 ## Requirements ##
 
@@ -39,7 +44,7 @@ You should already have:
 Note that MineControl MUST be run using **bash**, not sh.
 
 ## Changelog ##
-1.0.3 - 2012/04/XX - XX:XX PM EST
+1.0.3 - 2012/04/16 - 10:30 PM EST
 
 * Added server start/stop/kill logging. Can be toggled in the config.
 * Added 'log rolling.' Currently supports server.log and worldedit.log. Can be toggled in the config.
