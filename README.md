@@ -39,6 +39,12 @@ You should already have:
 Note that MineControl MUST be run using **bash**, not sh.
 
 ## Changelog ##
+1.0.3 - 2012/04/XX - XX:XX PM EST
+
+* Added server start/stop/kill logging. Can be toggled in the config.
+* Added 'log rolling.' Currently supports server.log and worldedit.log. Can be toggled in the config.
+* Refactored much of the project.
+
 1.0.2 - 2012/03/31 - 10:30 PM EST
 
 * Now stores all MineControl data in ~/.minecontrol/.
