@@ -1,4 +1,4 @@
-Current version: 1.0.3
+Current version: 1.0.4
 
 See *MineControl-latest.sh* for the latest stable release.
 
@@ -13,14 +13,9 @@ Previous releases will be found in *archive/*.
  * Properly stop server
  * Terminate server process (has built-in safe-guards to prevent accidential use)
 * Advanced log functionality
- * Can log server starts/stops with timestamp, as well as stop and kill attempts via MineControl.
- * Can 'roll' server.log and worldedit.log into timestamped files.
+ * Can 'roll' server.log and worldedit.log into timestamped files on demand or at server shutdown.
 
-## Planned Features ##
-* 1.0.4
- * Option to run server in a loop (automatic restart in the event of a crash)
- * Support for Twidge-based (Twitter) server status notifications
- * Minecraft Overviewer support for easier scheduled rendering
+## Roadmap ##
 * 1.1
  * Backups
 * Long-Term
@@ -44,6 +39,11 @@ You should already have:
 Note that MineControl MUST be run using **bash**, not sh.
 
 ## Changelog ##
+1.0.4 - 2012/08/07 - 06:08 PM EST
+
+* Added option to run server in a loop (automatic restart 10 seconds after it stops with prompt to abort)
+* Added Minecraft Overviewer support for easier scheduled rendering
+
 1.0.3 - 2012/04/16 - 10:30 PM EST
 
 * Added server start/stop/kill logging. Can be toggled in the config.
