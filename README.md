@@ -39,10 +39,15 @@ You should already have:
 Note that MineControl MUST be run using **bash**, not sh.
 
 ## Changelog ##
+1.0.5 - 2012/08/12 - 10:30 PM EST
+
+* Decreased pause between launching Minecraft/Overviewer and attaching to the screen.
+* Added arguments for opening server.properties and bukkit.yml for editing.
+
 1.0.4 - 2012/08/07 - 06:08 PM EST
 
-* Added option to run server in a loop (automatic restart 10 seconds after it stops with prompt to abort)
-* Added Minecraft Overviewer support for easier scheduled rendering
+* Added option to run server in a loop (automatic restart 10 seconds after it stops with prompt to abort).
+* Added Minecraft Overviewer support for easier scheduled rendering.
 
 1.0.3 - 2012/04/16 - 10:30 PM EST
 
