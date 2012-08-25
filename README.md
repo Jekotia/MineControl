@@ -1,4 +1,5 @@
-Current version: 1.0.5
+Current script version: 1.0.6
+Current config version: 1.0.5
 
 See *MineControl-latest.sh* for the latest stable release.
 
