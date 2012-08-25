@@ -1,5 +1,5 @@
 #!/bin/bash
-minecontrol_Version="1.0.5" # By Jekotia; https://github.com/Jekotia/MineControl
+minecontrol_Version="1.0.6" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # BEGIN Volatile user-editable section #
 	# WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
@@ -78,8 +78,8 @@ fi
 
 # BEGIN Common functions #
 sendtoscreen() {
-        screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
-        screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
+		screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
+		screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
 }
 
 isrunning() {
@@ -205,31 +205,33 @@ func_log_roll() {
 
 # BEGIN Misc functions #
 func_overviewer_render() {
-    if isrunning; then
-      sendtoscreen "save-all"
-      sleep 3
-      sendtoscreen "save-off"
-    fi
+	if isrunning; then
+		sendtoscreen "save-all"
+		sleep 3
+		sendtoscreen "save-off"
+	fi
 
 	ovr_numworlds=${#ovr_worlds[@]}
 
-    for ((i=0;i<$ovr_numworlds;i++)); do
-      mkdir -p ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Created ${temp_Dir}ovr-${ovr_worlds[$i]}"
-      cp -pR ${serverDir}${ovr_worlds[$i]}/* ${temp_Dir}/ovr-${ovr_worlds[$i]} && echo "Copied ${serverDir}${ovr_worlds[$i]}/*  to ${temp_Dir}/ovr-${worlds[$i]}"
-      echo "----------"
-    done
+	for ((i=0;i<$ovr_numworlds;i++)); do
+		mkdir -p ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Created ${temp_Dir}ovr-${ovr_worlds[$i]}"
+		cp -pR ${server_Dir}${ovr_worlds[$i]}/* ${temp_Dir}/ovr-${ovr_worlds[$i]} && echo "Copied ${server_Dir}${ovr_worlds[$i]}/*	to ${temp_Dir}/ovr-${ovr_worlds[$i]}"
+		echo "----------"
+	done
 
-    if isrunning; then
-      sendtoscreen "save-on"
-    fi
+	if isrunning; then
+		sendtoscreen "save-on"
+	fi
 
 	echo "Starting Overviewer..." && $overviewer_Invocation
 
-    for ((i=0;i<$ovr_numworlds;i++)); do
-      rm -rf ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Removed previous ${temp_Dir}ovr-${ovr_worlds[$i]}"
-    done
+	for ((i=0;i<$ovr_numworlds;i++)); do
+		rm -rf ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Removed previous ${temp_Dir}ovr-${ovr_worlds[$i]}"
+	done
 
-    exit 0
+	sleep 120
+
+	exit 0
 }
 # END Misc functions #
 

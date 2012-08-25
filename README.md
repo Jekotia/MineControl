@@ -38,7 +38,15 @@ You should already have:
 
 Note that MineControl MUST be run using **bash**, not sh.
 
+## How to Use... ##
+### Overviewer ###
+Make your overviewer.conf file like you normally would, but specify the world locations as '/home/<linux user>/.minecontrol/temp/ovr-<worldname>' replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
+
 ## Changelog ##
+1.0.6 - 2012/08/25 - 3:25 PM EST
+
+* Fixed critical, gauranteed failure in overviewer functionality.
+
 1.0.5 - 2012/08/12 - 10:30 PM EST
 
 * Decreased pause between launching Minecraft/Overviewer and attaching to the screen.
