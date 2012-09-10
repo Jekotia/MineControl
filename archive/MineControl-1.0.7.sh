@@ -71,7 +71,6 @@ if [ ! "$1" = "config" ] && [ ! "$1" = "version" ] && [ ! "$1" = "help" ] && [ "
 fi
 
 # BEGIN Set internal variables #
-	#forcesavefile=${var_Dir}"forcesave.sh"
 	overviewer_Invocation="$overviewer_Loc --config=$overviewer_config_Loc" # Fully defined overviewer invocation
 	java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
 	temp_Dir=~/".minecontrol/temp/"
@@ -88,7 +87,6 @@ isrunning() {
 	return $?
 }
 # END Common functions #
-
 # BEGIN Core functions #
 func_server_Status() {
 	if isrunning; then
@@ -113,9 +111,6 @@ func_server_Start() {
 	else
 		echo "Starting Minecraft server..."
 		cd $server_Dir
-		#if [ "$forcesave_Enable" = "true" ]; then
-		#	echo "forcesave=on" > $forcesavefile
-		#fi
 
 		while true
 		do
@@ -133,17 +128,11 @@ func_server_Start() {
 				exit 0
 			fi
 		done
-		#if [ "$forcesave_Enable" = "true" ]; then
-		#	echo "forcesave=off" > $forcesavefile
-		#fi
 		exit 0
 	fi
 }
 func_server_Stop() {
 	if isrunning; then
-		#if [ "$forcesave_Enable" = "true" ]; then
-		#	echo "forcesave=off" > $forcesavefile
-		#fi
 		sendtoscreen "save-all"
 		sendtoscreen "stop"
 		func_server_Resume
