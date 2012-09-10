@@ -1,7 +1,7 @@
-Current script version: 1.0.6
-Current config version: 1.0.5
+* Current script version: 1.0.7
+* Current config version: 1.0.5
 
-See *MineControl-latest.sh* for the latest stable release.
+See *MineControl-latest.sh* for the latest stable script, and *MineControl-latest.conf* for the latest stable configuration.
 
 Previous releases will be found in *archive/*.
 
@@ -41,9 +41,14 @@ Note that MineControl MUST be run using **bash**, not sh.
 
 ## How to Use... ##
 ### Overviewer ###
-Make your overviewer.conf file like you normally would, but specify the world locations as '/home/<linux user>/.minecontrol/temp/ovr-<worldname>' replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
+Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/.minecontrol/temp/ovr-<worldname>` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
 
 ## Changelog ##
+1.0.7 2012/09/10 - 12:56 PM EST
+
+* Fixed a scripting mistake in the `config bukkit` command.
+* Updated `log roll` for new *worldedit.log* file location.
+
 1.0.6 - 2012/08/25 - 3:25 PM EST
 
 * Fixed critical, gauranteed failure in overviewer functionality.
@@ -60,9 +65,8 @@ Make your overviewer.conf file like you normally would, but specify the world lo
 
 1.0.3 - 2012/04/16 - 10:30 PM EST
 
-* Added server start/stop/kill logging. Can be toggled in the config.
+* Added server start/stop/kill logging. Can be toggled in the config. *This has since been removed*
 * Added 'log rolling.' Currently supports server.log and worldedit.log. Can be toggled in the config.
-* Refactored much of the project.
 
 1.0.2 - 2012/03/31 - 10:30 PM EST
 
