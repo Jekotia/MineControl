@@ -78,8 +78,8 @@ fi
 
 # BEGIN Common functions #
 sendtoscreen() {
-		screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
-		screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
+	screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
+	screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
 }
 
 isrunning() {
