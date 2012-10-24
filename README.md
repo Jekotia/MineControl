@@ -35,6 +35,7 @@ Previous releases will be found in *archive/*.
 You will need to install:
 
 * screen
+* cpufrequtils (only needed for setting processor affinities)
 
 You should already have:
 
