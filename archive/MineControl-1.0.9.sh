@@ -1,5 +1,5 @@
 #!/bin/bash
-minecontrol_Version="1.0.8" # By Jekotia; https://github.com/Jekotia/MineControl
+minecontrol_Version="1.0.9" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # BEGIN Volatile user-editable section #
 	# WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
