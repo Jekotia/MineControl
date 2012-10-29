@@ -8,6 +8,7 @@ minecontrol_Version="1.0.9a" # By Jekotia; https://github.com/Jekotia/MineContro
 	minecontrol_Conf=$minecontrol_Dir"minecontrol.conf"
 	# Kay, stop touching things now.
 # END Volatile user-editable section #
+
 source $minecontrol_Conf # Includes the conf file
 
 func_init() {	
@@ -92,6 +93,10 @@ func_common_sendtoscreen() {
 		screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
 }
 func_common_isrunning() {
+	if [ ! -f "$server_PID_File" ]; then
+		return 1
+	fi
+
 	ps ax | grep -v grep | grep -v screen | grep $(<"$server_PID_File") > /dev/null
 	return $?
 }
@@ -125,7 +130,6 @@ func_core_start_Check() {
 		server_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`)
 		server_PID="${server_PID:0:5}"
 		echo "${server_PID}" > $server_PID_File
-		exit
 		if [ "$taskset_Enable" = "true" ]; then
 			taskset -pc ${taskset_Processors} ${server_PID}
 		fi
@@ -243,7 +247,11 @@ func_log_roll() {
 
 # BEGIN Overviewer functions #
 func_overviewer_isrunning() {
-	ps ax | grep -v grep | grep -v screen | grep (<"$overviewer_PID_File") > /dev/null
+	if [ ! -f "$overviewer_PID_File" ]; then
+		return 1
+	fi
+
+	ps ax | grep -v grep | grep -v screen | grep $(<"$overviewer_PID_File") > /dev/null
 	return $?
 }
 func_overviewer_Status() {
