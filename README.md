@@ -1,4 +1,4 @@
-* Current script version: 1.0.9
+* Current script version: 1.0.9a
 * Current config version: 1.0.8
 
 See *MineControl-latest.sh* for the latest stable script, and *MineControl-latest.conf* for the latest stable configuration.
@@ -49,6 +49,10 @@ Note that MineControl MUST be run using **bash**, not sh.
 Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/.minecontrol/temp/ovr-<worldname>/` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
 
 ## Changelog ##
+1.0.9a 2012/10/28 - 8:35 PM EST
+
+* Critical fix in process status checks, because last time it seems to have been a fluke.
+
 1.0.9 2012/10/25 - 03:10 PM EST
 
 * Critical fix in process status checks
