@@ -3,7 +3,8 @@ minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
-	minecontrol_Conf=${minecontrol_Dir}"minecontrol.conf"
+	minecontrol_Conf=~/"Dropbox/GitHub/MineControl/MineControl-dev.conf" #/ minecontrol_Conf=${minecontrol_Dir}"minecontrol.conf"
+	source $minecontrol_Conf # Includes the conf file
 	overviewer_Invocation="$overviewer_Loc --config=$overviewer_config_Loc" # Fully defined overviewer invocation
 	java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
 	log_roll_worldedit_Loc="${server_Dir}plugins/WorldEdit/worldedit.log"
@@ -12,10 +13,6 @@ minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
 	overviewer_PID_File="${var_Dir}overviewer.pid"
 	forcesave_File="${var_Dir}forcesave.var"
 # Kay, stop touching things now. One typo and this script could destroy your server.
-
-minecontrol_Conf=~/"Dropbox/GitHub/MineControl/MineControl-dev.conf" #/
-
-source $minecontrol_Conf # Includes the conf file
 
 _init() {
 	# BEGIN Core tests #
