@@ -3,60 +3,75 @@ minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
-	minecontrol_Conf=$minecontrol_Dir"minecontrol.conf"
+	minecontrol_Conf=${minecontrol_Dir}"minecontrol.conf"
+	overviewer_Invocation="$overviewer_Loc --config=$overviewer_config_Loc" # Fully defined overviewer invocation
+	java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
+	log_roll_worldedit_Loc="${server_Dir}plugins/WorldEdit/worldedit.log"
+	log_roll_chestshop_Loc="${server_Dir}plugins/ChestShop/ChestShop.log"
+	server_PID_File="${var_Dir}java.pid"
+	overviewer_PID_File="${var_Dir}overviewer.pid"
+	forcesave_File="${var_Dir}forcesave.var"
 # Kay, stop touching things now. One typo and this script could destroy your server.
 
 minecontrol_Conf=~/"Dropbox/GitHub/MineControl/MineControl-dev.conf" #/
 
 source $minecontrol_Conf # Includes the conf file
 
-func_init() {	
+_init() {
 	# BEGIN Core tests #
-	if [ ! -d "$minecontrol_Dir" ]; then # Checks if $minecontrol_Dir doesn't exist
-		mkdir $minecontrol_Dir && echo "Created $minecontrol_Dir" || echo "Failed to create $minecontrol_Dir !"
+	if [ ! -d "${minecontrol_Dir}" ]; then # Checks if ${minecontrol_Dir} doesn't exist
+		mkdir ${minecontrol_Dir} && echo "Created ${minecontrol_Dir}" || echo "Failed to create ${minecontrol_Dir} !"
 	fi
-	
-	if [ ! -d "${var_Dir}" ]; then # Checks if $var_Dir doesn't exist
-		mkdir -p $var_Dir && echo "Created $var_Dir" || echo "Failed to create $var_Dir !"
+
+	if [ ! -d "${var_Dir}" ]; then # Checks if ${var_Dir} doesn't exist
+		mkdir -p ${var_Dir} && echo "Created ${var_Dir}" || echo "Failed to create ${var_Dir} !"
 	fi
-	
+
 	if [ ! -d "${temp_Dir}" ]; then # Checks if $temp_Dir doesn't exist
 		mkdir -p $temp_Dir && echo "Created $temp_Dir" || echo "Failed to create $temp_Dir !"
 	fi
-	
-	if [ ! -d "${backup_Dir}" ] && [ "$backup_world_Enable" = "true" ]; then # Checks if $backup_Dir doesn't exist
-		mkdir -p $backup_Dir && echo "Created $backup_Dir" || echo "Failed to create $backup_Dir !"
+
+	if [ ! -d "${backup_Dir}worlds/" ] && [ "$backup_world_Enable" = "true" ]; then # Checks if ${backup_Dir}worlds/ doesn't exist
+		mkdir -p ${backup_Dir}worlds/ && echo "Created ${backup_Dir}worlds/" || echo "Failed to create ${backup_Dir}worlds/ !"
 	fi
-	
+
+	if [ ! -d "${backup_Dir}plugins/" ] && [ "$backup_world_Enable" = "true" ]; then # Checks if ${backup_Dir}plugins/ doesn't exist
+		mkdir -p ${backup_Dir}plugins/ && echo "Created ${backup_Dir}plugins/" || echo "Failed to create ${backup_Dir}plugins/ !"
+	fi
+
+	if [ ! -d "${backup_Dir}server/" ] && [ "${backup_world_Enable}" = "true" ]; then # Checks if ${backup_Dir}server/ doesn't exist
+		mkdir -p ${backup_Dir}server/ && echo "Created ${backup_Dir}server/" || echo "Failed to create ${backup_Dir}server/ !"
+	fi
+
 	if [ ! -d "${log_Dir}" ]; then # Checks if $log_Dir doesn't exist
 		mkdir -p $log_Dir && echo "Created $log_Dir" || echo "Failed to create $log_Dir !"
 	fi
-	
+
 	if [ ! -f "$minecontrol_Conf" ]; then # Checks if $minecontrol_Conf doesn't exist
 		echo "$minecontrol_Conf does not exist. Downloading latest minecontrol.conf..."
 		cd $minecontrol_Dir
 		wget -v https://raw.github.com/Jekotia/MineControl/master/MineControl-latest.conf && mv MineControl-latest.conf minecontrol.conf && echo "$minecontrol_Conf successfully downloaded. You should edit this file to suit your setup. Use '$0 config' to open the config file for editing at any time." || echo "Failed to download minecontrol.conf!" # Downloads the latest conf file from GitHub
 		exit 1
 	fi
-	
+
 	if [ ! -d "$server_Dir" ]; then # Checks if $server_Dir doesn't exist
 		echo "Fatal Error: The Minecraft server directory specified for server_Dir ($server_Dir) does not exist."
 		fatal_error="true"
 	fi
-	
+
 	if [ ! -f "$server_Dir$server_File" ]; then # Checks if $server_File doesn't exist
 		echo "Fatal Error: The Minecraft server file specified for server_File ($server_File) does not exist."
 		fatal_error="true"
 	fi
 	# END Core tests #
-	
+
 	# BEGIN Java tests #
 	command -v $java_Loc >/dev/null || java_error_1="true" # Checks if $java_Loc doesn't exist as a command
 	
 	if [ ! -f "$java_Loc" ]; then # Checks if $java_Loc doesn't exist as an absolute path
 		java_error_2="true"
 	fi
-	
+
 	if [ "$java_error_1" = "true" ] && [ "$java_error_2" = "true" ]; then # If both tests failed, the specified java binary is not valid
 		echo "Fatal Error: The java binary specified for java_Loc ($java_Loc) does not exist."
 		fatal_error="true"
@@ -76,30 +91,21 @@ func_init() {
 		mkdir -p ${log_Dir}chestshop/ && echo "Created ${log_Dir}chestshop/" || echo "Failed to create ${log_Dir}chestshop/"
 	fi
 	# END Logging tests #
-	
-	
+
 	if [ ! "$1" = "config" ] && [ ! "$1" = "version" ] && [ ! "$1" = "help" ] && [ "$fatal_error" = "true" ]; then
 		exit 1
 	fi
 }
 
-# BEGIN Set internal variables #
-	overviewer_Invocation="$overviewer_Loc --config=$overviewer_config_Loc" # Fully defined overviewer invocation
-	java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
-	log_roll_worldedit_Loc="${server_Dir}plugins/WorldEdit/worldedit.log"
-	log_roll_chestshop_Loc="${server_Dir}plugins/ChestShop/ChestShop.log"
-	server_PID_File="${var_Dir}java.pid"
-	overviewer_PID_File="${var_Dir}overviewer.pid"
-# END Set internal variables #
+_init # Call the _init. TEST ALL THE THINGS!
 
-func_init
 # BEGIN Common functions #
-func_common_sendtoscreen() {
+_common_sendtoscreen() {
 		screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
-		func_log_common "Minecraft Server: '$1' sent to server screen."
+		_log_common "Minecraft Server: '$1' sent to server screen."
 		screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
 }
-func_common_isrunning() {
+_common_isrunning() {
 	if [ ! -f "$server_PID_File" ]; then
 		return 1
 	fi
@@ -107,17 +113,16 @@ func_common_isrunning() {
 	ps ax | grep -v grep | grep -v screen | grep $(<"$server_PID_File") > /dev/null
 	return $?
 }
-func_common_log() {
+_common_log() {
 	if [ "$log_scriptEvents" = "true" ]; then
-		log_msg="$(date '+%Y-%m-%d')_$(date '+%H-%M-%S'): $1"
 		if [ "$log_scriptEvents_append" = "true" ]; then
-			echo $log_msg >> ${log_Dir}minecontrol.log
+			echo $(date '+%Y-%m-%d')_$(date '+%H-%M-%S')": $1" >> ${minecontrol_Dir}minecontrol.log
 		else
-			echo $log_msg | cat - ${log_Dir}minecontrol.log > ${log_Dir}minecontrol.log.temp && mv ${log_Dir}minecontrol.log.temp ${log_Dir}minecontrol.log
+			echo $(date '+%Y-%m-%d')_$(date '+%H-%M-%S')": $1" | cat - ${minecontrol_Dir}minecontrol.log > ${temp_Dir}minecontrol.temp && mv ${temp_Dir}minecontrol.log ${minecontrol_Dir}minecontrol.log
 		fi
 	fi
 }
-func_common_inArray() { # based on http://stackoverflow.com/q/3685970
+_common_inArray() { # based on http://stackoverflow.com/q/3685970
 	local n=$#
 	local value=${!n}
 	for ((i=1;i < $#;i++)) {
@@ -128,11 +133,33 @@ func_common_inArray() { # based on http://stackoverflow.com/q/3685970
 	echo "n"
 	return 1
 }
+_common_forcesave() {
+	if [ "$forcesave_Enable" = "true" ]; then
+		if [ $(<"${forcesave_File}") = "enabled" ]; then
+			if _common_isrunning; then
+				_common_sendtoscreen "save-all"
+				_common_log "Forcesave: issued to server screen."
+			else
+				_common_log "Forcesave: issued with no running server."
+			fi
+		fi
+	fi
+}
+_common_forcesave_enable() {
+	if _common_isrunning && [ "$forcesave_Enable" = "true" ]; then
+		echo "enabled" > $forcesave_File
+	fi
+}
+_common_forcesave_disable() {
+	if _common_isrunning && [ "$forcesave_Enable" = "true" ]; then
+		echo "disabled" > $forcesave_File
+	fi
+}
 # END Common functions #
 
 # BEGIN Core functions #
-func_core_Status() {
-	if func_common_isrunning; then
+_core_Status() {
+	if _common_isrunning; then
 		echo "Running Minecraft server:"
 
 		# Display process activity information of the server (5 character length pID)
@@ -148,8 +175,8 @@ func_core_Status() {
 		exit 0
 	fi
 }
-func_core_start_Check() {
-	if func_common_isrunning; then
+_core_start_Check() {
+	if _common_isrunning; then
 		echo "Minecraft server is already running."
 	else
 		screen -dmS $server_Screen bash $0 start-now # Directs the script to start itself in a screen
@@ -163,20 +190,27 @@ func_core_start_Check() {
 		screen -x $server_Screen
 	fi
 }
-func_core_Start() {
-	if func_common_isrunning; then
+_core_Start() {
+	if _common_isrunning; then
 		echo "Minecraft server is already running."
 		exit 1
 	else
 		echo "Starting Minecraft server..."
 		cd $server_Dir
 
-		func_common_log "Minecraft Server: started."
+		_common_forcesave_enable
+
+		_common_log "Minecraft Server: started."
 		$java_Invocation # Start the server!
-		func_common_log "Server process: ended. See previous/next entry for cause."
+		_common_log "Server process: ended. See previous/next entry for cause."
+
 		rm "$server_PID_File"
+		if [ "$forcesave_Enable" = "true" ]; then
+			rm $forcesave_File
+		fi
+
 		if [ "$log_roll_onStop" = "true" ]; then # Roll logs on server stop, if configured to do so.
-			func_log_roll
+			_log_roll
 		fi
 		if [ "$server_loop_Enable" = "true" ]; then
 			echo -n "Press Enter to abort the loop. You have 10 seconds before the server restarts: "
@@ -187,29 +221,29 @@ func_core_Start() {
 		if [ "$server_loop_Exit" = "ABORT" ]; then
 			exit 0
 		else
-			func_common_log "Minecraft Server: starting due to loop configuration."
+			_common_log "Minecraft Server: starting due to loop configuration."
 			screen -dmS $server_Screen bash $0 start-now
 		fi
 		exit 0
 	fi
 }
-func_core_Stop() {
-	if func_common_isrunning; then
-		func_log_common "Minecraft Server: 'stop' command issued via MineControl."
-		func_common_sendtoscreen "save-all"
-		func_common_sendtoscreen "stop"
-		func_core_Resume
+_core_Stop() {
+	if _common_isrunning; then
+		_log_common "Minecraft Server: 'stop' command issued via MineControl."
+		_common_sendtoscreen "save-all"
+		_common_sendtoscreen "stop"
+		_core_Resume
 		exit 0
 	else
 		echo "Minecraft server is not running."
 		exit 1
 	fi
 }
-func_core_Resume() {
+_core_Resume() {
 	screen -x $server_Screen
 }
-func_core_Kill() {
-	if ! func_common_isrunning; then
+_core_Kill() {
+	if ! _common_isrunning; then
 		echo "No server process detected."
 		exit 1
 	else
@@ -225,19 +259,19 @@ func_core_Kill() {
 				sleep 1
 	
 				echo "Attempting to kill rogue $server_File process..."
-				func_common_log "Minecraft Server: process kill attempted."
+				_common_log "Minecraft Server: process kill attempted."
 	
 				kill -9 $(<"$server_PID_File")
 				sleep 10
 	
 				# Check for process status after pkill attempt
-				if func_common_isrunning; then
+				if _common_isrunning; then
 					echo "$server_File could not be killed!"
-					func_common_log "Minecraft Server: process kill failed."
+					_common_log "Minecraft Server: process kill failed."
 					exit 1
 				else
 					echo "$server_File process terminated!"
-					func_common_log "Minecraft Server: process kill successful."
+					_common_log "Minecraft Server: process kill successful."
 					exit 0
 				fi
 			fi
@@ -247,95 +281,101 @@ func_core_Kill() {
 # END Core functions #
 
 # BEGIN Backup functions #
-func_backup_world_compress() {
+_backup_world_compress() {
 	cd $temp_Dir
 	if [ "$backup_world_Compression" = "zip" ]; then
 		zip -v ${backup_Dir}$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
 		if [ "${?}" -ne "0" ]; then
-			func_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
 		else
-			func_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
 		fi
 	else
 		echo "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."
-		func_common_log "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."
+		_common_log "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."
 	fi
 }
-func_backup_world_makeTemp() {
+_backup_world_makeTemp() {
 	mkdir -p ${temp_Dir}${bak_worlds[$i]} && echo "Created ${temp_Dir}${bak_worlds[$i]}"
 	cp -pR ${server_Dir}${bak_worlds[$i]}/* ${temp_Dir}${bak_worlds[$i]} && echo "Copied ${server_Dir}${bak_worlds[$i]}/* to ${temp_Dir}${bak_worlds[$i]}"
 }
-func_backup_world_cleanup() {
+_backup_world_cleanup() {
 	rm -rf ${temp_Dir}${bak_worlds[$i]} && echo "Removed previous ${temp_Dir}${bak_worlds[$i]}"
 }
-func_backup_world() {
+_backup_world() {
 	bak_numworlds=${#bak_worlds[@]}
 	
 	if [ "$1" = "-all" ]; then
-		if func_common_isrunning; then
-			func_common_sendtoscreen "save-all"
-			func_common_sendtoscreen "save-off"
+		if _common_isrunning; then
+			_common_sendtoscreen "save-all"
+			_common_sendtoscreen "save-off"
+		fi
+
+		_common_forcesave_disable
+
+		for ((i=0;i<$bak_numworlds;i++)); do
+			_backup_world_makeTemp
+		done
+
+		_common_forcesave_enable
+
+		if _common_isrunning; then
+			_common_sendtoscreen "save-on"
 		fi
 
 		for ((i=0;i<$bak_numworlds;i++)); do
-			func_backup_world_makeTemp
-		done
-
-		if func_common_isrunning; then
-			func_common_sendtoscreen "save-on"
-		fi
-
-		for ((i=0;i<$bak_numworlds;i++)); do
-			func_backup_world_compress
+			_backup_world_compress
 		done
 
 		for ((i=0;i<$bak_numworlds;i++)); do
-			func_backup_world_cleanup
+			_backup_world_cleanup
 		done
 	else
-		if func_common_inArray "${bak_worlds[@]}" $1; then
+		if _common_inArray "${bak_worlds[@]}" $1; then
 			i=$1
-			if func_common_isrunning; then
-				func_common_sendtoscreen "save-all"
-				func_common_sendtoscreen "save-off"
+			if _common_isrunning; then
+				_common_sendtoscreen "save-all"
+				_common_sendtoscreen "save-off"
 			fi
 
-			func_backup_world_makeTemp
+			_common_forcesave_disable
+			_backup_world_makeTemp
+			_common_forcesave_enable
 
-			if func_common_isrunning; then
-				func_common_sendtoscreen "save-on"
+			if _common_isrunning; then
+				_common_sendtoscreen "save-on"
 			fi
 
-			func_backup_world_compress
+			_backup_world_compress
 			
-			func_backup_world_cleanup
+			_backup_world_cleanup
 		else
 			echo "'$1' did not match any worlds in the configuration! Backup sequence aborted."
-			func_common_log "'$1' did not match any worlds in the configuration! Backup sequence aborted."
+			_common_log "World backup: failed. '$1' did not match any worlds in the configuration."
 		fi
 	fi
 }
 # END Backup functions #
 
 # BEGIN Log functions #
-func_log_Roll() {
+_log_Roll() {
 	if [ "$log_roll_server_Enable" = "true" ] || [ "$log_roll_worldedit_Enable" = "true" ] || [ "$log_roll_chestshop_Enable" = "true" ]; then
-		if func_common_isrunning; then
+		if _common_isrunning; then
 			echo "Stop the Minecraft server before rolling logs!"
-			func_common_log "Log-roll: failed due to running server."
+			_common_log "Log-roll: failed due to running server."
 		else
 			if [ "$log_roll_server_Enable" = "true" ]; then
 				if [ ! -f "${server_Dir}server.log" ]; then # 
 					echo "There is no file to 'roll' at ${server_Dir}server.log"
-					func_common_log "Log-roll: failed. There is no file to 'roll' at ${server_Dir}server.log"
+					_common_log "Log-roll: failed. There is no file to 'roll' at ${server_Dir}server.log"
 				else
 					mv ${server_Dir}server.log ${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').server.log
 					if [ "${?}" -ne "0" ]; then
 						echo "Failed to move '${server_Dir}server.log' to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: failed to move '${server_Dir}server.log' to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: failed to move '${server_Dir}server.log' to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					else
 						echo "'${server_Dir}server.log' moved to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: successfully moved '${server_Dir}server.log' to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: successfully moved '${server_Dir}server.log' to '${log_Dir}server/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					fi
 				fi
 			fi
@@ -343,15 +383,15 @@ func_log_Roll() {
 			if [ "$log_roll_worldedit_Enable" = "true" ]; then
 				if [ ! -f "$log_roll_worldedit_Loc" ]; then # 
 					echo "There is no file to 'roll' at ${log_roll_worldedit_Loc}"
-					func_common_log "Log-roll: failed. There is no file to 'roll' at ${log_roll_worldedit_Loc}"
+					_common_log "Log-roll: failed. There is no file to 'roll' at ${log_roll_worldedit_Loc}"
 				else
 					mv -n ${log_roll_worldedit_Loc} ${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').worldedit.log
 					if [ "${?}" -ne "0" ]; then
 						echo "Log-roll: failed to move '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: failed to move '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: failed to move '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					else
 						echo "Log-roll: successfully moved '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: successfully moved '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: successfully moved '${log_roll_worldedit_Loc}' to '${log_Dir}worldedit/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					fi
 				fi
 			fi
@@ -359,15 +399,15 @@ func_log_Roll() {
 			if [ "$log_roll_chestshop_Enable" = "true" ]; then
 				if [ ! -f "$log_roll_chestshop_Loc" ]; then # 
 					echo "There is no file to 'roll' at ${log_roll_chestshop_Loc}"
-					func_common_log "Log-roll: failed. There is no file to 'roll' at ${log_roll_chestshop_Loc}"
+					_common_log "Log-roll: failed. There is no file to 'roll' at ${log_roll_chestshop_Loc}"
 				else
 					mv -n ${log_roll_chestshop_Loc} ${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').chestshop.log
 					if [ "${?}" -ne "0" ]; then
 						echo "Log-roll: failed to move '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: failed to move '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: failed to move '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					else
 						echo "Log-roll: successfully moved '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
-						func_common_log "Log-roll: successfully moved '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
+						_common_log "Log-roll: successfully moved '${log_roll_chestshop_Loc}' to '${log_Dir}chestshop/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').log'"
 					fi
 				fi
 			fi
@@ -379,7 +419,7 @@ func_log_Roll() {
 # END Log functions #
 
 # BEGIN Overviewer functions #
-func_overviewer_isrunning() {
+_overviewer_isrunning() {
 	if [ ! -f "$overviewer_PID_File" ]; then
 		return 1
 	fi
@@ -387,8 +427,8 @@ func_overviewer_isrunning() {
 	ps ax | grep -v grep | grep -v screen | grep $(<"$overviewer_PID_File") > /dev/null
 	return $?
 }
-func_overviewer_Status() {
-	if func_overviewer_isrunning; then
+_overviewer_Status() {
+	if _overviewer_isrunning; then
 		echo "Running overviewer instance:"
 
 		# Display process activity information of the server (5 character length pID)
@@ -404,8 +444,8 @@ func_overviewer_Status() {
 		exit 0
 	fi
 }
-func_overviewer_render_check() {
-	if func_overviewer_isrunning; then
+_overviewer_render_check() {
+	if _overviewer_isrunning; then
 		echo "Overviewer is already running!"
 		exit 0
 	else
@@ -417,38 +457,41 @@ func_overviewer_render_check() {
 		screen -x $overviewer_Screen
 	fi
 }				
-func_overviewer_render() {
-	if func_common_isrunning; then
-		func_common_sendtoscreen "save-all"
+_overviewer_render() {
+	if _common_isrunning; then
+		_common_sendtoscreen "save-all"
 		echo "save-all sent to server"
-		func_common_sendtoscreen "save-off"
+		_common_sendtoscreen "save-off"
 		echo "save-off sent to server"
 	fi
 
-	ovr_numworlds=${#ovr_worlds[@]}
+	_common_forcesave_disable
 
+	ovr_numworlds=${#ovr_worlds[@]}
 	for ((i=0;i<$ovr_numworlds;i++)); do
 		mkdir -p ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Created ${temp_Dir}ovr-${ovr_worlds[$i]}"
 		cp -pR ${server_Dir}${ovr_worlds[$i]}/* ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Copied ${server_Dir}${ovr_worlds[$i]}/* to ${temp_Dir}ovr-${ovr_worlds[$i]}"
 	done
 
-	if func_common_isrunning; then
-		func_common_sendtoscreen "save-on"
+	_common_forcesave_enable
+
+	if _common_isrunning; then
+		_common_sendtoscreen "save-on"
 		echo "save-on sent to server"
 	fi
 
 	echo "Starting Overviewer..."
-	func_common_log "Overviewer: starting render."
+	_common_log "Overviewer: starting render."
 	
 	$overviewer_Invocation
 	if [ "${?}" -ne "0" ]; then
 		echo "Overviewer render failed!"
-		func_common_log "Overviewer: render failed."
+		_common_log "Overviewer: render failed."
 	else
 		echo "Overviewer render completed successfully!"
-		func_common_log "Overviewer: render successful."
-		if func_common_isrunning && [ "$overviewer_announce_Enable" = "true" ]; then
-			func_common_sendtoscreen "$overviewer_announce_Complete"
+		_common_log "Overviewer: render successful."
+		if _common_isrunning && [ "$overviewer_announce_Enable" = "true" ]; then
+			_common_sendtoscreen "$overviewer_announce_Complete"
 		fi
 	fi
 
@@ -458,11 +501,11 @@ func_overviewer_render() {
 		rm -rf ${temp_Dir}ovr-${ovr_worlds[$i]} && echo "Removed previous ${temp_Dir}ovr-${ovr_worlds[$i]}"
 	done
 }
-func_overviewer_resume() {
+_overviewer_resume() {
 	screen -x $overviewer_Screen
 }
-func_overviewer_Kill() {
-	if ! func_overviewer_isrunning; then
+_overviewer_Kill() {
+	if ! _overviewer_isrunning; then
 		echo "No overviewer process detected."
 		exit 0
 	else
@@ -483,13 +526,13 @@ func_overviewer_Kill() {
 				sleep 10
 	
 				# Check for process status after pkill attempt
-				if func_overviewer_isrunning; then
+				if _overviewer_isrunning; then
 					echo "$overviewer_Loc could not be killed!"
-					func_common_log "Overviewer: process kill failed."
+					_common_log "Overviewer: process kill failed."
 					exit 1
 				else
 					echo "$overviewer_Loc process terminated!"
-					func_common_log "Overviewer: process kill successful."
+					_common_log "Overviewer: process kill successful."
 					exit 0
 				fi
 			fi
@@ -507,6 +550,10 @@ usage() {
 	echo "'$0 stop' sends the stop command to the screen session."
 	echo "'$0 resume' attachs your session to the screen session."
 	echo "'$0 kill' kills the server process."
+	if [ "$forcesave_Enable" = "true" ]; then
+		echo "----Forcesave-----"
+		echo "'$0 forcesave' forces a world save on the server."		
+	fi
 	if [ "$backup_world_Enable" = "true" ]; then
 		echo "---World Backup---"
 		echo "'$0 backup world' followed by either -all for all configured worlds, or a world name."
@@ -533,30 +580,35 @@ usage() {
 case $1 in
 # BEGIN Core #
 	status)
-		func_core_Status
+		_core_Status
 		exit 0
 	;;
 	start)
-		func_core_start_Check
+		_core_start_Check
 		exit 0
 	;;
 	start-now)
-		func_core_Start
+		_core_Start
 		exit 0
 	;;
 	stop)
-		func_core_Stop
+		_core_Stop
 		exit 0
 	;;
 	resume)
-		func_core_Resume
+		_core_Resume
 		exit 0
 	;;
 	kill)
-		func_core_Kill
+		_core_Kill
 		exit 0
 	;;
 # END Core #
+
+	forcesave)
+		_common_forcesave
+		exit 0
+	;;
 
 # BEGIN Backup #
 	backup)
@@ -565,7 +617,7 @@ case $1 in
 				if [ "$3" = "" ]; then
 					usage
 				else
-					func_backup_world $3
+					_backup_world $3
 				fi
 				exit 0
 			;;
@@ -574,8 +626,6 @@ case $1 in
 				exit 0
 			;;
 		esac
-		usage
-		exit 0
 	;;
 # END Backup #
 
@@ -583,7 +633,7 @@ case $1 in
 	log)
 		case $2 in
 			roll)
-				func_log_Roll
+				_log_Roll
 				exit 0
 			;;
 			*)
@@ -591,8 +641,6 @@ case $1 in
 				exit 0
 			;;
 		esac
-		usage
-		exit 0
 	;;
 # END Log #
 
@@ -600,19 +648,19 @@ case $1 in
 	overviewer)
 		case $2 in
 			status)
-				func_overviewer_status
+				_overviewer_status
 				exit 0
 			;;
 			start)
-				func_overviewer_render_check
+				_overviewer_render_check
 				exit 0
 			;;
 			resume)
-				func_overviewer_resume
+				_overviewer_resume
 				exit 0
 			;;
 			kill)
-				func_overviewer_Kill
+				_overviewer_Kill
 				exit 0
 			;;
 			*)
@@ -624,7 +672,7 @@ case $1 in
 		exit 0
 	;;
 	overviewer-start)
-		func_overviewer_render
+		_overviewer_render
 		exit 0
 	;;
 # END Overviewer #
@@ -660,7 +708,8 @@ case $1 in
 		exit 0
 	;;
 	version)
-		echo "This is version $minecontrol_Version of MineControl by Jekotia."
+		echo "This is version ${minecontrol_Version} of MineControl, by Jekotia."
+		echo "You are using version ${minecontrol_conf_Version} of the configuration file."
 		echo "Source is available at https://github.com/Jekotia/MineControl"
 		exit 0
 	;;

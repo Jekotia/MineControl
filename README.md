@@ -1,7 +1,9 @@
-* Current script version: 1.0.9a
-* Current config version: 1.0.8
+* Current script version: 1.1
+* Current config version: 1.1
 
 See *MineControl-latest.sh* for the latest stable script, and *MineControl-latest.conf* for the latest stable configuration.
+
+See *MineControl-dev.sh* and *MineControl-dev.conf* for my development files.
 
 Previous releases will be found in *archive/*.
 
@@ -14,7 +16,10 @@ Previous releases will be found in *archive/*.
  * Properly stop server
  * Terminate server process (has built-in safe-guards to prevent accidential use)
  * Can run the server in a loop, meaning that when the process ends it automatically starts again
+* World backups (currently supports zip. More compression types to come)
+* Forcesave command, Cron ready
 * Advanced log functionality
+ * Logs all actions by MineControl to file
  * Can 'roll' server.log and worldedit.log into timestamped files on demand or at server shutdown
 * Minecraft Overviewer support
  * If the MC server is running, forces a save on it, disables saving, copies specified worlds to temp directory, re-enables saving, then invokes Overviewer
@@ -39,18 +44,29 @@ You will need to install:
 You should already have:
 
 * bash
-* busybox (Needed for: echo, grep, kill, ps, sleep, and top. This is responsible for many of the standard *nix commands. If you don't already have this, something is horribly wrong).
+* busybox or equivalent for standard Unix commands
 * command
-* tar
-* zip
 
 Note that MineControl MUST be run using **bash**, not sh.
 
 ## How to Use... ##
 ### Overviewer ###
-Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/.minecontrol/temp/ovr-<worldname>/` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
+Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/<temp directory in config>/ovr-<worldname>/` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
 
 ## Changelog ##
+1.1 2012/11/05 - X:XX XM EST
+
+* Configuration tweaks
+ * Moved previously internal variables for the temp and var directories to the conf
+ * Moved logs directory into the main MineControl directories block of the conf
+ * Added backup directory conf entry
+* Added world backups
+ * `MineControl.sh backup world`, followed by a world name from the config, or the -all switch.
+* Added forcesave command
+ * `Minecontrol.sh forcesave`
+* Added logging for script actions
+ * Log can be found at .minecontrol/minecontrol.log
+
 1.0.9a 2012/10/28 - 8:35 PM EST
 
 * Critical fix in process status checks, because last time it seems to have been a fluke.
