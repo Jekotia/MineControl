@@ -32,14 +32,6 @@ _init() {
 		mkdir -p ${backup_Dir}worlds/ && echo "Created ${backup_Dir}worlds/" || echo "Failed to create ${backup_Dir}worlds/ !"
 	fi
 
-	if [ ! -d "${backup_Dir}plugins/" ] && [ "$backup_world_Enable" = "true" ]; then # Checks if ${backup_Dir}plugins/ doesn't exist
-		mkdir -p ${backup_Dir}plugins/ && echo "Created ${backup_Dir}plugins/" || echo "Failed to create ${backup_Dir}plugins/ !"
-	fi
-
-	if [ ! -d "${backup_Dir}server/" ] && [ "${backup_world_Enable}" = "true" ]; then # Checks if ${backup_Dir}server/ doesn't exist
-		mkdir -p ${backup_Dir}server/ && echo "Created ${backup_Dir}server/" || echo "Failed to create ${backup_Dir}server/ !"
-	fi
-
 	if [ ! -d "${log_Dir}" ]; then # Checks if $log_Dir doesn't exist
 		mkdir -p $log_Dir && echo "Created $log_Dir" || echo "Failed to create $log_Dir !"
 	fi
@@ -92,6 +84,7 @@ _init() {
 	if [ ! "$1" = "config" ] && [ ! "$1" = "version" ] && [ ! "$1" = "help" ] && [ "$fatal_error" = "true" ]; then
 		exit 1
 	fi
+	touch ${minecontrol_Dir}minecontrol.log
 }
 
 _init # Call the _init. TEST ALL THE THINGS!
@@ -99,7 +92,7 @@ _init # Call the _init. TEST ALL THE THINGS!
 # BEGIN Common functions #
 _common_sendtoscreen() {
 		screen -S $server_Screen -p 0 -X stuff "$(printf \\r)" # Submit the current content of the input area in the Minecraft server console to ensure the intended command is sent correctly
-		_log_common "Minecraft Server: '$1' sent to server screen."
+		_common_log "Minecraft Server: '$1' sent to server screen."
 		screen -S $server_Screen -p 0 -X stuff "$1 $(printf \\r)" # Sends the intended command
 }
 _common_isrunning() {
@@ -115,7 +108,7 @@ _common_log() {
 		if [ "$log_scriptEvents_append" = "true" ]; then
 			echo $(date '+%Y-%m-%d')_$(date '+%H-%M-%S')": $1" >> ${minecontrol_Dir}minecontrol.log
 		else
-			echo $(date '+%Y-%m-%d')_$(date '+%H-%M-%S')": $1" | cat - ${minecontrol_Dir}minecontrol.log > ${temp_Dir}minecontrol.temp && mv ${temp_Dir}minecontrol.log ${minecontrol_Dir}minecontrol.log
+			echo $(date '+%Y-%m-%d')_$(date '+%H-%M-%S')": $1" | cat - ${minecontrol_Dir}minecontrol.log > ${temp_Dir}minecontrol.temp && mv ${temp_Dir}minecontrol.temp ${minecontrol_Dir}minecontrol.log
 		fi
 	fi
 }
@@ -177,7 +170,7 @@ _core_start_Check() {
 		echo "Minecraft server is already running."
 	else
 		screen -dmS $server_Screen bash $0 start-now # Directs the script to start itself in a screen
-		sleep 2
+		sleep 1
 		server_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`)
 		server_PID="${server_PID:0:5}"
 		echo "${server_PID}" > $server_PID_File
@@ -226,7 +219,7 @@ _core_Start() {
 }
 _core_Stop() {
 	if _common_isrunning; then
-		_log_common "Minecraft Server: 'stop' command issued via MineControl."
+		_common_log "Minecraft Server: 'stop' command issued via MineControl."
 		_common_sendtoscreen "save-all"
 		_common_sendtoscreen "stop"
 		_core_Resume
@@ -281,7 +274,8 @@ _core_Kill() {
 _backup_world_compress() {
 	cd $temp_Dir
 	if [ "$backup_world_Compression" = "zip" ]; then
-		zip -v ${backup_Dir}$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
+		mkdir -p ${backup_Dir}worlds/${bak_worlds[$i]}/
+		zip -v ${backup_Dir}worlds/${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
 		if [ "${?}" -ne "0" ]; then
 			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
 		else
