@@ -3,8 +3,8 @@ minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
+	minecontrol_Conf=${minecontrol_Dir}"minecontrol.conf"
 	minecontrol_Conf=~/"Dropbox/GitHub/MineControl/MineControl-dev.conf" #/ minecontrol_Conf=${minecontrol_Dir}"minecontrol.conf"
-	source $minecontrol_Conf # Includes the conf file
 	overviewer_Invocation="$overviewer_Loc --config=$overviewer_config_Loc" # Fully defined overviewer invocation
 	java_Invocation="${java_Loc} ${java_Args} -Xmx${java_Mem} -jar ${server_Dir}${server_File} nogui" # Fully defined java invocation
 	log_roll_worldedit_Loc="${server_Dir}plugins/WorldEdit/worldedit.log"
@@ -277,9 +277,9 @@ _backup_world_compress() {
 		mkdir -p ${backup_Dir}worlds/${bak_worlds[$i]}/
 		zip -v ${backup_Dir}worlds/${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
 		if [ "${?}" -ne "0" ]; then
-			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		else
-			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		fi
 	else
 		echo "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."

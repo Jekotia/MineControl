@@ -277,9 +277,9 @@ _backup_world_compress() {
 		mkdir -p ${backup_Dir}worlds/${bak_worlds[$i]}/
 		zip -v ${backup_Dir}worlds/${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
 		if [ "${?}" -ne "0" ]; then
-			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		else
-			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}.zip"
+			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		fi
 	else
 		echo "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."
