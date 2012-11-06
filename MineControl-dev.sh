@@ -84,7 +84,9 @@ _init() {
 	if [ ! "$1" = "config" ] && [ ! "$1" = "version" ] && [ ! "$1" = "help" ] && [ "$fatal_error" = "true" ]; then
 		exit 1
 	fi
-	touch ${minecontrol_Dir}minecontrol.log
+	if [ ! -f "${log_Dir}minecontrol.log" ]; then
+		touch ${minecontrol_Dir}minecontrol.log
+	fi
 }
 
 _init # Call the _init. TEST ALL THE THINGS!
@@ -274,12 +276,12 @@ _core_Kill() {
 _backup_world_compress() {
 	cd $temp_Dir
 	if [ "$backup_world_Compression" = "zip" ]; then
-		mkdir -p ${backup_Dir}worlds/${bak_worlds[$i]}/
-		zip -v ${backup_Dir}worlds/${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${bak_worlds[$i]}
+		mkdir -p ${backup_Dir}worlds/${1}/
+		zip -v ${backup_Dir}worlds/${1}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip -r ${1}
 		if [ "${?}" -ne "0" ]; then
-			_common_log "World Backup, zip: failed to compress ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
+			_common_log "World Backup, zip: failed to compress ${temp_Dir}${1} to ${backup_Dir}${1}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		else
-			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${bak_worlds[$i]} to ${backup_Dir}${bak_worlds[$i]}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
+			_common_log "World Backup, zip: successfully compressed ${temp_Dir}${1} to ${backup_Dir}${1}/$(date '+%Y-%m-%d')_$(date '+%H-%M-%S').zip"
 		fi
 	else
 		echo "World Backup: failed. Run with invalid backup_world_Compression value ($backup_world_Compression)."
@@ -287,11 +289,11 @@ _backup_world_compress() {
 	fi
 }
 _backup_world_makeTemp() {
-	mkdir -p ${temp_Dir}${bak_worlds[$i]} && echo "Created ${temp_Dir}${bak_worlds[$i]}"
-	cp -pR ${server_Dir}${bak_worlds[$i]}/* ${temp_Dir}${bak_worlds[$i]} && echo "Copied ${server_Dir}${bak_worlds[$i]}/* to ${temp_Dir}${bak_worlds[$i]}"
+	mkdir -p ${temp_Dir}${1} && echo "Created ${temp_Dir}${1}"
+	cp -pR ${server_Dir}${1}/* ${temp_Dir}${1} && echo "Copied ${server_Dir}${1}/* to ${temp_Dir}${1}"
 }
 _backup_world_cleanup() {
-	rm -rf ${temp_Dir}${bak_worlds[$i]} && echo "Removed previous ${temp_Dir}${bak_worlds[$i]}"
+	rm -rf ${temp_Dir}${target_world} && echo "Removed previous ${temp_Dir}${target_world}"
 }
 _backup_world() {
 	bak_numworlds=${#bak_worlds[@]}
@@ -305,7 +307,7 @@ _backup_world() {
 		_common_forcesave_disable
 
 		for ((i=0;i<$bak_numworlds;i++)); do
-			_backup_world_makeTemp
+			_backup_world_makeTemp "${bak_worlds[$i]}"
 		done
 
 		_common_forcesave_enable
@@ -315,31 +317,30 @@ _backup_world() {
 		fi
 
 		for ((i=0;i<$bak_numworlds;i++)); do
-			_backup_world_compress
+			_backup_world_compress "${bak_worlds[$i]}"
 		done
 
 		for ((i=0;i<$bak_numworlds;i++)); do
-			_backup_world_cleanup
+			_backup_world_cleanup "${bak_worlds[$i]}"
 		done
 	else
 		if _common_inArray "${bak_worlds[@]}" $1; then
-			i=$1
 			if _common_isrunning; then
 				_common_sendtoscreen "save-all"
 				_common_sendtoscreen "save-off"
 			fi
 
 			_common_forcesave_disable
-			_backup_world_makeTemp
+			_backup_world_makeTemp "${1}"
 			_common_forcesave_enable
 
 			if _common_isrunning; then
 				_common_sendtoscreen "save-on"
 			fi
 
-			_backup_world_compress
+			_backup_world_compress "${1}"
 			
-			_backup_world_cleanup
+			_backup_world_cleanup "${1}"
 		else
 			echo "'$1' did not match any worlds in the configuration! Backup sequence aborted."
 			_common_log "World backup: failed. '$1' did not match any worlds in the configuration."
