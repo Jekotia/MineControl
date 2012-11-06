@@ -27,11 +27,14 @@ Previous releases will be found in *archive/*.
  * Built in safe-guards, Cron ready
 
 ## Roadmap ##
-* 1.1
- * Backups
-* Long-Term
- * Force saves with fore-warnings (for use with cron)
- * Nightly restart with log file rotation (for use with cron)
+
+* 1.1.1
+ * Plugin Backups
+* 1.1.2
+ * Full server backups
+
+## Long-Term ##
+ * Fully automated restart with backups
  * Interactive mode
  * Support for various plugins where it may be helpful (i.e. better WorldGuard blacklist editing, copies new blacklist.txt to each worlds directory under WorldGuard/worlds/).
 
@@ -46,6 +49,7 @@ You should already have:
 * bash
 * busybox or equivalent for standard Unix commands
 * command
+* zip
 
 Note that MineControl MUST be run using **bash**, not sh.
 
@@ -54,7 +58,7 @@ Note that MineControl MUST be run using **bash**, not sh.
 Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/<temp directory in config>/ovr-<worldname>/` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
 
 ## Changelog ##
-1.1 2012/11/05 - X:XX XM EST
+1.1 2012/11/05 - 11:45 PM EST
 
 * Configuration tweaks
  * Moved previously internal variables for the temp and var directories to the conf
