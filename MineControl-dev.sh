@@ -4,7 +4,7 @@ minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
 	minecontrol_Conf=$minecontrol_Dir"minecontrol.conf"
-# Kay, stop touching things now.
+# Kay, stop touching things now. One typo and this script could destroy your server.
 
 minecontrol_Conf=~/"Dropbox/GitHub/MineControl/MineControl-dev.conf" #/
 
@@ -24,7 +24,7 @@ func_init() {
 		mkdir -p $temp_Dir && echo "Created $temp_Dir" || echo "Failed to create $temp_Dir !"
 	fi
 	
-	if [ ! -d "${backup_Dir}" ]; then # Checks if $backup_Dir doesn't exist
+	if [ ! -d "${backup_Dir}" ] && [ "$backup_world_Enable" = "true" ]; then # Checks if $backup_Dir doesn't exist
 		mkdir -p $backup_Dir && echo "Created $backup_Dir" || echo "Failed to create $backup_Dir !"
 	fi
 	
@@ -117,6 +117,17 @@ func_common_log() {
 		fi
 	fi
 }
+func_common_inArray() { # based on http://stackoverflow.com/q/3685970
+	local n=$#
+	local value=${!n}
+	for ((i=1;i < $#;i++)) {
+		if [ "${!i}" == "${value}" ]; then
+			return 0
+		fi
+	}
+	echo "n"
+	return 1
+}
 # END Common functions #
 
 # BEGIN Core functions #
@@ -142,7 +153,7 @@ func_core_start_Check() {
 		echo "Minecraft server is already running."
 	else
 		screen -dmS $server_Screen bash $0 start-now # Directs the script to start itself in a screen
-		sleep 1
+		sleep 2
 		server_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`)
 		server_PID="${server_PID:0:5}"
 		echo "${server_PID}" > $server_PID_File
@@ -257,17 +268,6 @@ func_backup_world_makeTemp() {
 func_backup_world_cleanup() {
 	rm -rf ${temp_Dir}${bak_worlds[$i]} && echo "Removed previous ${temp_Dir}${bak_worlds[$i]}"
 }
-func_backup_world_inArray() { # based on http://stackoverflow.com/q/3685970
-	local n=$#
-	local value=${!n}
-	for ((i=1;i < $#;i++)) {
-		if [ "${!i}" == "${value}" ]; then
-			return 0
-		fi
-	}
-	echo "n"
-	return 1
-}
 func_backup_world() {
 	bak_numworlds=${#bak_worlds[@]}
 	
@@ -293,7 +293,7 @@ func_backup_world() {
 			func_backup_world_cleanup
 		done
 	else
-		if func_backup_world_inArray "${bak_worlds[@]}" $1; then
+		if func_common_inArray "${bak_worlds[@]}" $1; then
 			i=$1
 			if func_common_isrunning; then
 				func_common_sendtoscreen "save-all"

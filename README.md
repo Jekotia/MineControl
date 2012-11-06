@@ -41,6 +41,8 @@ You should already have:
 * bash
 * busybox (Needed for: echo, grep, kill, ps, sleep, and top. This is responsible for many of the standard *nix commands. If you don't already have this, something is horribly wrong).
 * command
+* tar
+* zip
 
 Note that MineControl MUST be run using **bash**, not sh.
 
