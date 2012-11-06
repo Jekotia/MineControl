@@ -1,0 +1,3 @@
+# Set the correct line endings for the files run by Unix
+.sh text eol=lf
+.conf text eol=lf
