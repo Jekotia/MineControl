@@ -1,4 +1,4 @@
-* Current script version: 1.1a
+* Current script version: 1.1b
 * Current config version: 1.1
 
 See *MineControl-latest.sh* for the latest stable script, and *MineControl-latest.conf* for the latest stable configuration.
@@ -58,6 +58,12 @@ Note that MineControl MUST be run using **bash**, not sh.
 Make your overviewer.conf file like you normally would, but specify the world locations as `/home/<linux user>/<temp directory in config>/ovr-<worldname>/` replacing <linux user> with the username of the logged in user, and <worldname> with the name of the world.
 
 ## Changelog ##
+1.1b 2012/11/08 - 11:18 PM EST
+
+* Fixed the `overviewer start` command ignoring the value of 'overviewer_Enable'
+* Improved PID writing for overviewer
+* Other small tweaks
+
 1.1a 2012/11/06 - 1:00 PM EST
 
 * Fixed issue with individual world backup

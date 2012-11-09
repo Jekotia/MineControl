@@ -1,5 +1,5 @@
 #!/bin/bash
-minecontrol_Version="1.1" # By Jekotia; https://github.com/Jekotia/MineControl
+minecontrol_Version="1.1b" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
@@ -437,15 +437,22 @@ _overviewer_Status() {
 	fi
 }
 _overviewer_render_check() {
+	if [ "$overviewer_Enable" = "true" ]; then
+		echo "Overviewer support is disabled in the MineControl configuration. Aborting."
+		exit 0
+	fi
 	if _overviewer_isrunning; then
 		echo "Overviewer is already running!"
 		exit 0
 	else
 		screen -dmS $overviewer_Screen bash $0 overviewer-start # Directs the script to start itself in a screen
 		sleep 1
-		overviewer_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$overviewer_Loc"`)
-		overviewer_PID="${overviewer_PID:0:5}"
-		echo "${overviewer_PID}" > $overviewer_PID_File
+		while [ "$overviewer_PID" = "" ]; do
+			overviewer_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$overviewer_Loc"`)
+			overviewer_PID="${overviewer_PID:0:5}"
+			echo "${overviewer_PID}" > $overviewer_PID_File
+			sleep 1
+		done
 		screen -x $overviewer_Screen
 	fi
 }				
