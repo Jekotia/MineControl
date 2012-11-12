@@ -438,7 +438,7 @@ _overviewer_Status() {
 	fi
 }
 _overviewer_render_check() {
-	if [ "$overviewer_Enable" = "true" ]; then
+	if [ "$overviewer_Enable" = "false" ]; then
 		echo "Overviewer support is disabled in the MineControl configuration. Aborting."
 		exit 0
 	fi
