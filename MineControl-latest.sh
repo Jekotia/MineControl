@@ -174,7 +174,8 @@ _core_start_Check() {
 	else
 		screen -dmS $server_Screen bash $0 start-now # Directs the script to start itself in a screen
 		sleep 1
-		server_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$server_File"`)
+		server_PID=(`ps ax | grep -v grep | grep -v 'sh ' | grep -v -i 'screen' | grep 
+"$server_File"`)
 		server_PID="${server_PID:0:5}"
 		echo "${server_PID}" > $server_PID_File
 		if [ "$taskset_Enable" = "true" ]; then
@@ -449,7 +450,8 @@ _overviewer_render_check() {
 		screen -dmS $overviewer_Screen bash $0 overviewer-start # Directs the script to start itself in a screen
 		sleep 1
 		while [ "$overviewer_PID" = "" ]; do
-			overviewer_PID=(`ps ax | grep -v grep | grep -v sh | grep -v -i 'screen' | grep "$overviewer_Loc"`)
+			overviewer_PID=(`ps ax | grep -v grep | grep -v 'sh ' | grep -v -i 'screen' | 
+grep "$overviewer_Loc"`)
 			overviewer_PID="${overviewer_PID:0:5}"
 			echo "${overviewer_PID}" > $overviewer_PID_File
 			sleep 1
