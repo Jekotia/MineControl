@@ -1,5 +1,5 @@
 #!/bin/bash
-minecontrol_Version="1.1b" # By Jekotia; https://github.com/Jekotia/MineControl
+minecontrol_Version="1.1c" # By Jekotia; https://github.com/Jekotia/MineControl
 
 # WARNING! ONLY CHANGE THE BELOW VARIABLES IF YOU ARE VERY SURE OF WHAT YOU ARE DOING
 	minecontrol_Dir=~/".minecontrol/"
