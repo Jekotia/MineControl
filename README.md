@@ -5,8 +5,6 @@ See *MineControl-latest.sh* for the latest stable script, and *MineControl-lates
 
 See *MineControl-dev.sh* and *MineControl-dev.conf* for my development files.
 
-Previous releases will be found in *archive/*.
-
 ## Features ##
 
 * Easy to configure
